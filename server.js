@@ -7,6 +7,20 @@ require('dotenv').config();
 
 const PORT = process.env.PORT;
 
+app.use(bodyParser.json());
+
+app.get('/', (req, res) => {
+	res.sendFile('./views/register.html', {
+		root: `${__dirname}/`
+	})
+})
+
+app.get('/login', (req, res) => {
+	res.sendFile('./views/login.html', {
+		root: `${__dirname}/`
+	})
+})
+
 /* User Route */
 app.get('/api/v1/users', (req, res) => {
 
