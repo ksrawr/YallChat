@@ -1,5 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const bcrypt = require('bcryptjs');
 const app = express();
 
@@ -9,8 +11,18 @@ require('dotenv').config();
 const PORT = process.env.PORT;
 
 app.use(bodyParser.json());
-
 app.use(express.static(__dirname + '/public'));
+
+app.use(session({
+    store: new MongoStore({ url: process.env.MONGO_URI }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 3 // Expire in 24 hours
+    }
+  })
+);
 
 app.get('/', (req, res) => {
 	res.sendFile('./views/register.html', {
@@ -24,25 +36,29 @@ app.get('/login', (req, res) => {
 	})
 })
 
+app.get('/home', (req, res) => {
+	res.sendFile('./views/index.html', {
+		root: `${__dirname}/`
+	})
+})
 
 /* -------------------- AUTH API ROUTES ------------ */
 
 // AUTH Register
 app.post('/api/v1/register', (req, res) => {
-
 	db.User.findOne({email: req.body.email}, (err, foundUser) => {
 
-		if(err) return res.status(500).json({message: "Something went wrong", error});
+		if(err) return res.status(500).json({message: "Something went wrong", err});
 
 		if(foundUser) return res.status(409).json({message: "User already registered"});
 
 		bcrypt.genSalt(10, (err, salt) => {
 
-			if(error) return res.status(500).json({message: 'Something went wrong'});
+			if(err) return res.status(500).json({message: 'Something went wrong'});
 
-			bcrypt.hash(req.body.password, salt, (error, hash) => {
+			bcrypt.hash(req.body.password, salt, (err, hash) => {
 
-				if(error) return res.status(500).json({message: 'Something went wrong'});
+				if(err) return res.status(500).json({message: 'Something went wrong'});
 
 				const newUser = {
 					name: req.body.name,
@@ -50,11 +66,11 @@ app.post('/api/v1/register', (req, res) => {
 					password: hash,
 				};
 
-				db.User.create(newUser, (error, createdUser) => {
+				db.User.create(newUser, (err, createdUser) => {
 
-					if(error) return res.status(500).json({message: "Something went wrong"});
+					if(err) return res.status(500).json({message: "Something went wrong"});
 
-					res.sendStatus(201).json({message: 'user created'});
+					res.status(201).json({message: 'user created', status: 201});
 
 				})
 
@@ -68,7 +84,6 @@ app.post('/api/v1/register', (req, res) => {
 
 // AUTH Login
 app.post('/api/v1/login', (req, res) => {
-
 	db.User.findOne({email: req.body.email}, (err, foundUser) => {
 
 		if(err) return res.status(500).json({message: "Something went wrong", err});
@@ -81,7 +96,7 @@ app.post('/api/v1/login', (req, res) => {
 
 			if(isMatch) {
 
-				request.session.currentUser = {
+				req.session.currentUser = {
 					id: foundUser._id,
 					name: foundUser.name,
 					email: foundUser.email
@@ -111,7 +126,7 @@ app.get('/api/v1/users', (req, res) => {
 
 	db.User.find({}, (err, foundUsers) => {
 
-		if(err) return res.status(500).json({message: 'Something went wrong', error});
+		if(err) return res.status(500).json({message: 'Something went wrong', err});
 
 		const responseObj = {
 			status: 200,
