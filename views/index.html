@@ -2,10 +2,15 @@
 <html>
 <head>
 	<title></title>
+
+	<!-- Bootstrap -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	<script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+	<!-- Custom CSS + Scripts -->
+	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
 
@@ -34,14 +39,35 @@
 					<!-- Chat Tab Content -->
 					<div class="tab-pane fade show active" id="nav-chat" role="tabpanel" aria-labelledby="nav-chat-tab">
 
+						<div class="card search-container">
+							<div class="card-body">
+								<form class="form-inline" id="searchChat">
+								  <div class="form-group mb-2 mx-sm-1">
+								    <input type="text" class="form-control" id="chatQuery" placeholder="Search Chats">
+								    <button type="submit" class="btn btn-primary">Search</button>
+								  </div>
+								</form>
+							</div>
+						</div>
+
 						<div class="card">
-						  <div class="card-body">
-						    This is some text within a card body.
-						  </div>
+							<div class="card-body">
+								<div class="d-flex justify-content-between align-items-center">
+							  	<p><strong class='chat-name'>User X</strong></p>
+							  	<p><span class='chat-time'>11:20pm</span></p>
+							  </div>
+							  <p>This is some text within a card body.</p>
+							</div>
+						  
+
 						</div>
 						<div class="card">
 						  <div class="card-body">
-						    This is some text within a card body.
+						    <div class="d-flex justify-content-between align-items-center">
+							  	<p><strong class='chat-name'>User X</strong></p>
+							  	<p><span class='chat-time'>11:20pm</span></p>
+							  </div>
+							  <p>This is some text within a card body.</p>
 						  </div>
 						</div>
 
@@ -49,10 +75,14 @@
 
 					<!-- Groups Tab Content -->
 				  <div class="tab-pane fade" id="nav-groups" role="tabpanel" aria-labelledby="nav-groups-tab">
-				  	
+
 				  	<div class="card">
 						  <div class="card-body">
-						    This is some text within a card body.
+						    <div class="d-flex justify-content-between align-items-center">
+							  	<p><strong class='chat-name'>Group Name</strong></p>
+							  	<p><span class='chat-time'>11:20pm</span></p>
+							  </div>
+							  <p>This is some text within a card body.</p>
 						  </div>
 						</div>
 						<div class="card">
