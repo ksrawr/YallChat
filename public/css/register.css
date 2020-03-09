@@ -20,8 +20,8 @@ h2 {
 input[type=text], input[type=password] {
   border: none;
   border: 1px solid #ced4da;
-  border-radius: 2px;
-  padding: 4px;
+  border-radius: 3px;
+  padding: 10px;
   min-width: 280px;
 }
 
