@@ -17,4 +17,17 @@
 	justify-content: center;
 	text-align: center;
 	border: 1px solid #ced4da;
+	position: relative;
+}
+
+.message-input {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	padding: 20px;
+}
+
+.message-input input {
+	padding: 5px;
+	width: 100%;
 }
