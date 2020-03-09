@@ -37,6 +37,7 @@ app.get('/login', (req, res) => {
 })
 
 app.get('/home', (req, res) => {
+	if(!req.session.currentUser) return res.redirect('/login');
 	res.sendFile('./views/index.html', {
 		root: `${__dirname}/`
 	})
@@ -121,14 +122,14 @@ app.post('/api/v1/login', (req, res) => {
 })
 
 
-app.delete('api/v1/logout', (req, res) => {
+app.delete('/api/v1/logout', (req, res) => {
 
 	if(!req.session.currentUser) return res.status(401).json({message: 'Unauthorized'});
 
 	req.session.destroy(err => {
 		if(err) return res.status(500).json({message: 'Something went wrong', error});
 
-		res.sendStatus(200);
+		res.status(200).json({message: 'logout success', status: 200});
 	})
 
 })
@@ -138,7 +139,7 @@ app.get('/api/v1/verify', (req, res) => {
 
 	if(!req.session.currentUser) return res.status(401).json({message: 'Unauthorized'});
 
-	response.status(200).json({message: `Current User verified. User ID: ${req.sessions.currentUser.id}`});
+	res.status(200).json({message: `Current User verified. User ID: ${req.session.currentUser.id}`});
 
 })
 
@@ -180,6 +181,12 @@ app.post('/api/v1/chatrooms/', (req, res) => {
 
 	})
 
+})
+
+
+/* 404 Route */
+app.get('/*', (req, res) => {
+	res.status(400).sendFile(__dirname + '/views/404.html');
 })
 
 app.listen(PORT, () => {
