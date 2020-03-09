@@ -19,6 +19,7 @@
     "mongoose": "^5.9.3"
   },
   "devDependencies": {
+    "gulp": "^4.0.2",
     "nodemon": "^2.0.2"
   }
 }

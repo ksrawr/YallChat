@@ -1,0 +1,10 @@
+.search-container {
+	border: none;	
+	border-right: 1px solid black;
+	border-left: 1px solid black;
+	border-radius: 0px;
+}
+
+.chat-time {
+	text-align: right;
+}
