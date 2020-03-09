@@ -27,7 +27,7 @@ const handleSubmit = () => {
  	 	.then(res => res.json())
  	 	.then(data => {
  	 		console.log(data);
- 	 		 if(data.status === 201) window.location = '/login';
+ 	 		if(data.status === 201) window.location = '/login';
  	 	})
  	 	.catch(err => console.warn(err));
 }
