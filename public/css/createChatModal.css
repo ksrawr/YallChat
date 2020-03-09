@@ -1,0 +1,15 @@
+.chatroom-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.chatroom-form div {
+	margin: 20px;
+}
+
+.chatroom-form input {
+	padding: 10px;
+	min-width: 280px;
+}

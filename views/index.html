@@ -11,6 +11,7 @@
 
 	<!-- Custom CSS + Scripts -->
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/createChatModal.css">
 </head>
 <body>
 
@@ -31,9 +32,45 @@
 			  	<div class="nav nav-tabs" id="nav-tab" role="tablist">
 			    <a class="nav-item nav-link active" id="nav-chat-tab" data-toggle="tab" href="#nav-chat" role="tab" aria-controls="nav-chat" aria-selected="true">Chat</a>
 			    <a class="nav-item nav-link" id="nav-groups-tab" data-toggle="tab" href="#nav-groups" role="tab" aria-controls="nav-groups" aria-selected="false">Groups</a>
-			    <a class="nav-item nav-link" id="nav-groups-tab" role="tab">+</a>
+			    <a class="nav-item nav-link" id="nav-groups-tab" role="tab">
+			    	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createChatRoomForm">
+						 	+
+						</button>
+			    </a>
 			  </div>
 			</nav>
+
+				<!-- Modal Popup Create ChatRoom Form -->
+				<div class="modal fade" id="createChatRoomForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+				  <div class="modal-dialog modal-dialog-centered" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" >Create a New Chat Room</h5>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+				        <div class="container chatroom-form text-center">
+				        	<form>
+				        		<div>
+				        			<input type="text" name="name" placeholder="Chat Room Name">
+				        		</div>
+				        		<div>
+				        			<!-- Search Users and Autofill Users that Match string -->
+				        			<input type="text" name="user" placeholder="Add Users">
+				        		</div>
+				        		<button type="submit" class="btn btn-primary">Create Chat Room</button>
+				        	</form>
+				        </div>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+				      </div>
+				    </div>
+				  </div>
+				</div>
 
 				<!-- Message Section -->
 				<div class="tab-content" id="nav-tabContent">
