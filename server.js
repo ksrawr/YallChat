@@ -140,6 +140,27 @@ app.get('/api/v1/users', (req, res) => {
 
 })
 
+/* Chat Room API Routes */
+app.post('/api/v1/chatrooms/', (req, res) => {
+
+	req.body.author = req.currentUser.id;
+
+	db.ChatRoom.create(req.body, (err, createdChatRoom) => {
+
+		if(err) return res.status(500).json({message: "Something went wrong", error});
+
+		const responseObj = {
+			status: 200,
+			data: createdChatRoom,
+			requestedAt: new Date().toLocaleString(),
+		};
+
+		res.status(200).json(responseObj);
+
+	})
+
+})
+
 app.listen(PORT, () => {
 	console.log(`Server is running on http://localhost:${PORT}`);
 })
