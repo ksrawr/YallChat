@@ -35,3 +35,20 @@
 .card {
 	cursor: pointer;
 }
+
+#chatHeader {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	text-align: left;
+	border: 1px solid #ced4da;
+}
+
+#chatHeader h4 {
+	margin-top: 10px;
+}
+
+#chatHeader button {
+	margin-top: 20px;
+}
