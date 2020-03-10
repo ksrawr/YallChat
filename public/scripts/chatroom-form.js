@@ -120,17 +120,57 @@ const getTheseUsers = () => {
 
 	} else {
 		chatFormSetState({
-			'availableUsers': []
+			availableUsers: []
 		})
 	}
 }
 
 const createChatRoom = () => {
 
-	
+	event.preventDefault();
+
+	const crNameInput = document.getElementById('chatRoomNameInput');
+	const usersSearchField = document.getElementById('usersInput');
+
+	console.log(crNameInput.value);
+
+	const chatRoomObj = {
+		name: crNameInput.value,
+		users: chatFormState.addedUsers,
+	};
+
+	fetch('/api/v1/chatrooms/', {
+		method: 'POST',
+		headers: {
+ 	 		'Content-Type': 'application/json',
+ 	 	},
+ 	 	body: JSON.stringify(chatRoomObj)
+	})
+		.then(res => res.json())
+		.then(data => {
+			console.log(data);
+			if(data.status === 200) {
+				chatFormSetState({
+					availableUsers: [],
+					addedUsers: []
+				})
+			}
+
+			crNameInput.value = '';
+			usersSearchField.value = '';
+
+			setTimeout(() => {
+				$('#createChatRoomForm').modal('hide');
+				setState({
+					chatrooms: data.data.chatrooms
+				});
+			}, 2000);
+
+		})
+		.catch(err => console.warn(err));
 
 };
 
 usersEl.addEventListener('input', getTheseUsers);
 
-// document.getElementById('createChatRoom').addEventListener('createChatRoom');
+document.getElementById('chatRoomForm').addEventListener('submit', createChatRoom);
