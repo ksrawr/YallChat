@@ -5,11 +5,35 @@
 	justify-content: center;
 }
 
-.chatroom-form div {
+.chatroom-form .chatroom-input {
 	margin: 20px;
 }
 
 .chatroom-form input {
 	padding: 10px;
 	min-width: 280px;
+}
+
+#suggestions {
+	margin-top: 20px;
+}
+
+.suggestion {
+	margin: 5px;
+	max-width: 280px;
+	max-height: 50px;
+	border: 1px solid #ced4da;
+	border-radius: 2px;
+	padding: 10px;
+	cursor: pointer;
+}
+
+@media (min-width: 576px)
+.modal-dialog {
+    max-width: 500px;
+    margin: 1.75rem auto;
+}
+
+.modal-dialog {
+	max-width: 800px;
 }
