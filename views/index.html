@@ -56,22 +56,42 @@
 				        </button>
 				      </div>
 				      <div class="modal-body">
-				        <div class="container chatroom-form text-center">
+				      	<div class="container">
+				      		<div class="row">
+				      			
+				      			<div class="col-sm-8">
+				      				<div class="container chatroom-form text-center d-flex justify-content-between align-items-center">
 				        	<form>
-				        		<div>
+				        		<div class="chatroom-input">
 				        			<input type="text" name="name" placeholder="Chat Room Name">
 				        		</div>
-				        		<div>
+				        		<div class="chatroom-input">
 				        			<!-- Search Users and Autofill Users that Match string -->
 				        			<input id="usersInput" type="text" name="user" placeholder="Add Users" list=suggestions autocomplete="off">
-				        			<datalist id="suggestions">
-				        				<option><img src="https://fleep.io/static/assets/2017/fleep_logo_small_blue.svg"></option>
-				        			</datalist>
+				        			<!-- <datalist id="suggestions">
+				        				
+				        			</datalist> -->
+
+				        			<div id="suggestions">
+				        				
+				        			</div>
+
 				        		</div>
 				        		<button type="submit" class="btn btn-primary">Create Chat Room</button>
 				        	</form>
 				        </div>
 				      </div>
+				      			</div>
+
+				      			<div class="col-sm-4">
+				      				
+
+				      			</div>
+
+				      		</div>
+
+				      	</div>
+				        
 				      <div class="modal-footer">
 				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 				        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
