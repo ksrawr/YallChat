@@ -12,6 +12,8 @@
 	<!-- Custom CSS + Scripts -->
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" type="text/css" href="css/createChatModal.css">
+	<script defer type="text/javascript" src="/scripts/app.js"></script>
+	<script defer type="text/javascript" src="/scripts/chatroom-form.js"></script>
 	<script defer type="text/javascript" src="/scripts/logout.js"></script>
 
 </head>
@@ -61,7 +63,7 @@
 				        		</div>
 				        		<div>
 				        			<!-- Search Users and Autofill Users that Match string -->
-				        			<input type="text" name="user" placeholder="Add Users">
+				        			<input id="usersInput" type="text" name="user" placeholder="Add Users">
 				        		</div>
 				        		<button type="submit" class="btn btn-primary">Create Chat Room</button>
 				        	</form>
@@ -140,7 +142,7 @@
 			</div>
 			<div class="col-sm-8 message-container">
 				<div>
-					<h4>Welcome, User</h4>
+					<h4>Welcome, <span id="userName">User<span></h4>
 					<p>Create a chat to start messaging</p>
 				</div>
 				<!-- Message Input -->
