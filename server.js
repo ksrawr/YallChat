@@ -169,7 +169,7 @@ app.get('/api/v1/users/search', (req, res) => {
 
 	if(!req.query.name) return res.status(405).json({message: 'Query string unknown'});
 
-	db.User.find({ "name": {$regex: `.*${req.query.name}.*`} }, (err, foundUsers) => {
+	db.User.find({ "name": {$regex: `.*${req.query.name}.*`} }).limit(5).exec((err, foundUsers) => {
 
 		if(err) return res.status(500).json({message: "Something went wrong", err});
 
