@@ -27,7 +27,12 @@ const handleSubmit = () => {
  		.then(res => res.json())
  		.then(data => {
  			console.log(data);
- 			if(data.status === 200) window.location = '/home';
+
+ 			if(data.status === 200) {
+ 				localStorage.setItem('uid', data.data);
+ 				window.location = '/home';
+ 			}
+ 			
  		})
  		.catch(err => console.warn(err));
 }
