@@ -5,12 +5,30 @@ let chatFormState = {
 	availableUsers: [],
 };
 
+const usersEl = document.getElementById('usersInput');
+
 const chatFormSetState = (obj) => {
 	chatFormState = {...chatFormState, ...obj}
 	console.log(chatFormState);
+	renderChatForm();
 }
 
-const usersEl = document.getElementById('usersInput');
+const displaySuggestedUsers = () => {
+	return chatFormState.availableUsers.map(user => {
+		return `<option value="${user.name}  (${user.email})">`
+	}).join('');
+}
+
+const renderChatForm = () => {
+
+	const suggestionsEl = document.getElementById('suggestions');
+
+	suggestionsEl.innerHTML = '';
+
+	if(chatFormState.availableUsers) {
+		suggestionsEl.insertAdjacentHTML('beforeend', displaySuggestedUsers());
+	}
+}
 
 const getTheseUsers = () => {
 
@@ -28,12 +46,16 @@ const getTheseUsers = () => {
 				const users = data.data;
 
 				chatFormSetState({
-					'availableUsers': users
+					availableUsers: users
 				});
 
 			})
 			.catch(err => console.warn(err));
 
+	} else {
+		chatFormSetState({
+			'availableUsers': []
+		})
 	}
 }
 
