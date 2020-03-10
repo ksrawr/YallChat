@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-Const Message = require('./Message');
+const Message = require('./Message');
 const Schema = mongoose.Schema;
 
 const ChatRoomSchema = Schema({
@@ -8,16 +8,20 @@ const ChatRoomSchema = Schema({
 		required: [true, 'ChatRoom requires a name']
 	},
 	author: {
-		type: Schema.Type.ObjectId,
+		type: Schema.Types.ObjectId,
 		ref: 'User'
 	},
 	users: [
 		{
-			type: Schema.Type.ObjectId,
+			type: Schema.Types.ObjectId,
 			ref: 'User',
 		}
 	],
-	messages: [Message.schema]
+	messages: [Message.schema],
+	date: {
+		type: Date,
+		default: Date.now
+	}
 })
 
 const ChatRoom = mongoose.model('ChatRoom', ChatRoomSchema);
