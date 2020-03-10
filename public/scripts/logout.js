@@ -11,7 +11,10 @@ const handleLogout = () => {
 		.then(res => res.json())
 		.then(data => {
 			console.log(data);
-			if(data.status === 200) window.location = '/login';
+			if(data.status === 200) {
+				localStorage.removeItem('uid');
+				window.location = '/login';
+			}
 		})
 		.catch(error => console.warn(error));
 
