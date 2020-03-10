@@ -3,15 +3,16 @@ console.log(' i am app js');
 let state = {
 	username: '',
 	chatrooms: [],
+	currentChat: null,
 };
 
 const userNameEl = document.getElementById('userName');
 const navChatEl = document.getElementById('nav-chat');
 
 const displayChats = () => {
-	return state.chatrooms.map(chatroom => {
+	return state.chatrooms.map((chatroom, index) => {
 		return `
-			<div class="card">
+			<div class="card" data-id="${index}">
 				<div class="card-body">
 					<div class="d-flex justify-content-between align-items-center">
 				  	<p><strong class='chat-name'>${chatroom.name}</strong></p>
@@ -23,6 +24,48 @@ const displayChats = () => {
 			</div>
 		`
 	}).join('');
+}
+
+const handleChatClick = () => {
+
+	console.log(' i am handle chat click');
+	console.log('ev.target', event.target.nodeName);
+
+	let parent;
+
+	if(event.target.nodeName === 'P') {
+		// console.log('event.target.parent.parent', event.target.parentNode.parentNode);
+		parent = event.target.parentNode.parentNode;
+	} else if(event.target.nodeName === 'SPAN' || event.target.nodeName === 'STRONG') {
+		// console.log('event.target.parent.parent.parent.parent', event.target.parentNode.parentNode.parentNode.parentNode);
+		parent = event.target.parentNode.parentNode.parentNode.parentNode;
+	} else if (event.target.classList.length >= 3) {
+		// console.log('event.target.parent.parent', event.target.parentNode.parentNode);
+		parent = event.target.parentNode.parentNode;
+	} else if (event.target.classList !== 'card') {
+		// console.log('event.target.parent', event.target.parentNode);
+		parent = event.target.parentNode;
+	}
+
+	/* Sanity on our edge cases!!!! */
+	console.log(parent);
+
+	const index = parent.getAttribute('data-id');
+	const id = state.chatrooms[index]._id;
+
+	if(id) {
+		fetch(`/api/v1/chatrooms/${id}`, {
+			method: 'GET',
+		})
+			.then(res => res.json())
+			.then(data => {
+				console.log(data);
+			})
+			.catch(err => console.warn(err));
+	} else {
+		console.log({id});
+	}
+
 }
 
 const render = () => {
@@ -43,6 +86,8 @@ const render = () => {
 	
 	if(state.chatrooms.length > 0) {
 		navChatEl.insertAdjacentHTML('beforeend', displayChats());
+
+		document.querySelectorAll('.card').forEach(chatroom => chatroom.addEventListener('click', handleChatClick));
 	}
 }
 

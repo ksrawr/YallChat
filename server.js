@@ -235,6 +235,24 @@ app.post('/api/v1/chatrooms/', (req, res) => {
 
 })
 
+app.get('/api/v1/chatrooms/:id', (req, res) => {
+
+	db.ChatRoom.findById(req.params.id).populate('chatrooms').exec((err, foundChatRoom) => {
+
+		if(err) return res.status(500).json({message: "Something went wrong", error});
+
+		const responseObj = {
+			status: 200,
+			data: foundChatRoom,
+			requestedAt: new Date().toLocaleString(),
+		};
+
+		res.status(200).json(responseObj);
+
+	})
+
+})
+
 
 /* 404 Route */
 app.get('/*', (req, res) => {
