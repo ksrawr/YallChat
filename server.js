@@ -189,7 +189,7 @@ app.get('/api/v1/users/search', (req, res) => {
 /* User API Routes */
 app.get('/api/v1/users/:id', (req, res) => {
 
-	db.User.findById(req.params.id, (err, foundUser) => {
+	db.User.findById(req.params.id).populate('chatrooms').exec((err, foundUser) => {
 
 		if(err) return res.status(500).json({message: 'Something went wrong', err});
 
@@ -208,19 +208,28 @@ app.get('/api/v1/users/:id', (req, res) => {
 /* Chat Room API Routes */
 app.post('/api/v1/chatrooms/', (req, res) => {
 
-	req.body.author = req.currentUser.id;
+	req.body.author = req.session.currentUser.id;
+	req.body.users.push(req.session.currentUser.id);
 
 	db.ChatRoom.create(req.body, (err, createdChatRoom) => {
 
 		if(err) return res.status(500).json({message: "Something went wrong", error});
 
-		const responseObj = {
-			status: 200,
-			data: createdChatRoom,
-			requestedAt: new Date().toLocaleString(),
-		};
 
-		res.status(200).json(responseObj);
+		db.User.findByIdAndUpdate(req.session.currentUser.id, { $push: { chatrooms: createdChatRoom._id } }, { new: true }).populate('chatrooms').exec((err, updatedUser) => {
+
+			if(err) return res.status(500).json({message: "Somethng went wrong", error});
+
+			const responseObj = {
+				status: 200,
+				data: updatedUser,
+				createdChatRoom: createdChatRoom,
+				requestedAt: new Date().toLocaleString(),
+			};
+
+			res.status(200).json(responseObj);
+
+		})
 
 	})
 
