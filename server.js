@@ -162,6 +162,49 @@ app.get('/api/v1/users', (req, res) => {
 
 })
 
+/* TODO: DO NOT INCLUDE CURRENT USER */
+// Search User 
+// Takes a Query String with Param: name
+app.get('/api/v1/users/search', (req, res) => {
+
+	if(!req.query.name) return res.status(405).json({message: 'Query string unknown'});
+
+	db.User.find({ "name": {$regex: `.*${req.query.name}.*`} }, (err, foundUsers) => {
+
+		if(err) return res.status(500).json({message: "Something went wrong", err});
+
+		const responseObj = {
+			status: 200,
+			data: foundUsers,
+			requestedAt: new Date().toLocaleString(),
+		};
+
+		res.status(200).json(responseObj);
+
+	})
+
+
+})
+
+/* User API Routes */
+app.get('/api/v1/users/:id', (req, res) => {
+
+	db.User.findById(req.params.id, (err, foundUser) => {
+
+		if(err) return res.status(500).json({message: 'Something went wrong', err});
+
+		const responseObj = {
+			status: 200,
+			data: foundUser,
+			requestedAt: new Date().toLocaleString(),
+		};
+
+		res.status(200).json(responseObj);
+
+	})
+
+})
+
 /* Chat Room API Routes */
 app.post('/api/v1/chatrooms/', (req, res) => {
 
