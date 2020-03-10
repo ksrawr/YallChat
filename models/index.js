@@ -13,4 +13,6 @@ mongoose.connect(dbUrl, {
 
 module.exports = {
 	User: require('./User'),
+	ChatRoom: require('./ChatRoom'),
+	Message: require('./Message'),
 }
