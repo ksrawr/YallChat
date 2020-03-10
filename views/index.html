@@ -61,36 +61,40 @@
 				      			
 				      			<div class="col-sm-8">
 				      				<div class="container chatroom-form text-center d-flex justify-content-between align-items-center">
-				        	<form>
-				        		<div class="chatroom-input">
-				        			<input type="text" name="name" placeholder="Chat Room Name">
-				        		</div>
-				        		<div class="chatroom-input">
-				        			<!-- Search Users and Autofill Users that Match string -->
-				        			<input id="usersInput" type="text" name="user" placeholder="Add Users" list=suggestions autocomplete="off">
-				        			<!-- <datalist id="suggestions">
-				        				
-				        			</datalist> -->
+							        	<form id="chatRoomForm">
+							        		<div class="chatroom-input">
+							        			<input id="chatRoomNameInput" type="text" name="name" placeholder="Chat Room Name">
+							        		</div>
+								        		<div class="chatroom-input">
+								        			<!-- Search Users and Autofill Users that Match string -->
+								        			<input id="usersInput" type="text" name="user" placeholder="Add Users" list=suggestions autocomplete="off">
+								        			
+								        			<!-- Users Found on Input List -->
+								        			<div id="suggestions">
+								        				
+								        			</div>
 
-				        			<div id="suggestions">
-				        				
-				        			</div>
+								        		</div>
+								        		<button type="submit" class="btn btn-primary">Create Chat Room</button>
+								        	</form>
+								        </div>
+								      </div>
 
-				        		</div>
-				        		<button type="submit" class="btn btn-primary">Create Chat Room</button>
-				        	</form>
-				        </div>
-				      </div>
+								      <!-- Selected Users List -->
+								      <div class="col-sm-4">
+
+								      	<div class="container">
+					      					<p>Users added... </p>
+					      					<div id="usersAdded">
+					      						
+					      					</div>
+								      	</div>
+				      					
 				      			</div>
-
-				      			<div class="col-sm-4">
-				      				
-
-				      			</div>
-
 				      		</div>
 
-				      	</div>
+				     		 </div>
+				     	</div>
 				        
 				      <div class="modal-footer">
 				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -125,9 +129,9 @@
 							  </div>
 							  <p>This is some text within a card body.</p>
 							</div>
-						  
 
 						</div>
+
 						<div class="card">
 						  <div class="card-body">
 						    <div class="d-flex justify-content-between align-items-center">
