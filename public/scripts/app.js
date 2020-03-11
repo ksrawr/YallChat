@@ -8,6 +8,7 @@ let state = {
 	messages: [],
 	selectedUsers: [],
 	openChannel: null,
+	availableUsers: []
 };
 
 const userNameEl = document.getElementById('userName');
@@ -61,6 +62,17 @@ const displaySelectedUsers = () => {
 		`;
 	}).join('');
 
+}
+
+const displayEditSuggestedUsers = () => {
+	return 'Found users...' + state.availableUsers.map((user, index) => {
+		return `
+							<div class="edit-suggestion d-flex justify-content-between align-items-center" data-id="${index}">
+							  	<p><strong class='chat-name'>${user.name}</strong></p>
+							  	<p><span class='chat-time'>${user.email}</span></p>
+							</div>
+						`;
+	}).join('');
 }
 
 const handleChatClick = () => {
@@ -120,11 +132,63 @@ const handleRemoveSelectedUser = () => {
 
 	state.selectedUsers.splice(index, 1);
 
+	renderSelectedUsers();
+}
+
+const renderSelectedUsers = () => {
 	const selectedUsersListEl = document.getElementById('usersSelected');
 
 	/* Re-render Selected Users List */
 	selectedUsersListEl.innerHTML = '';
 	selectedUsersListEl.insertAdjacentHTML('afterbegin', displaySelectedUsers());
+
+	document.querySelectorAll('.remove-user').forEach(btn => btn.addEventListener('click', handleRemoveSelectedUser));
+}
+
+const handleEditClickSuggestion = () => {
+
+	const element = event.target;
+
+	if(!element) return;
+
+	console.log(element.nodeName);
+	console.log(element.parentNode.parentNode);
+
+	let parent, id, newUser;
+
+	if(element.nodeName === 'SPAN' || element.nodeName === 'STRONG') {
+		
+		parent = element.parentNode.parentNode;
+		id = parseInt(parent.getAttribute('data-id'));
+		newUser = state.availableUsers[id];
+
+	} else if(element.nodeName === 'P') {
+
+		parent = element.parentNode;
+		id = parseInt(parent.getAttribute('data-id'));
+		newUser = state.availableUsers[id];
+
+	} else {
+
+		id = element.getAttribute('data-id');
+		newUser = state.availableUsers[id];
+
+	}
+
+	state.selectedUsers.push(newUser);
+	state.availableUsers.splice(id, 1);
+
+	renderSuggestUsers();
+	renderSelectedUsers();
+}
+
+const renderSuggestUsers = () => {
+	const suggestedUsers = document.getElementById('editUserSuggestions');
+	suggestedUsers.innerHTML = '';
+	suggestedUsers.insertAdjacentHTML('afterbegin', displayEditSuggestedUsers());
+
+	document.querySelectorAll('.edit-suggestion').forEach(suggestion => suggestion.addEventListener('click', handleEditClickSuggestion))
+
 }
 
 const handleSubmitMessage = () => {
@@ -225,7 +289,7 @@ const render = () => {
 							        		<div class="chatroom-input">
 							        			<input id="editUsersInput" type="text" name="user" placeholder="Add Users" list=suggestions autocomplete="off">
 							        			
-							        			<div id="editSuggestions">
+							        			<div id="editUserSuggestions">
 							        				
 							        			</div>
 
@@ -240,7 +304,7 @@ const render = () => {
 							      	<div class="container">
 				      					<p>Users added... </p>
 				      					<div id="usersSelected">
-				      						${displaySelectedUsers()}
+
 				      					</div>
 							      	</div>
 			      					
@@ -279,8 +343,38 @@ const render = () => {
 		messageListEl.innerHTML = '';
 		messageListEl.insertAdjacentHTML('afterbegin', displayMessages());
 
-		document.querySelectorAll('.remove-user').forEach(btn => btn.addEventListener('click', handleRemoveSelectedUser));
+		renderSelectedUsers();
 
+		document.getElementById('editUsersInput').addEventListener('input', handleGetSuggestedUsers);
+	}
+}
+
+const handleGetSuggestedUsers = () => {
+
+	console.log(event.target.value);
+
+	if(event.target.value) {
+
+		fetch(`/api/v1/users/search?name=${event.target.value}`, {
+			method: 'GET',
+		})
+			.then(res => res.json())
+			.then(data => {
+				console.log(data);
+
+				const users = data.data;
+
+				state.availableUsers = users;
+
+				if(state.availableUsers.length > 0) {
+					renderSuggestUsers();
+				}
+
+			})
+			.catch(err => console.warn(err));
+
+	} else {
+		state.availableUsers = [];
 	}
 }
 
