@@ -49,6 +49,22 @@ const displayMessages = () => {
 	}).join('')
 }
 
+const displaySelectedUsers = () => {
+
+	console.log(state.selectedUsers);
+
+	return state.selectedUsers.map((user, index) => {
+		return `
+			<div class="user-added d-flex justify-content-between align-items-center">
+				<button class="remove-user btn" data-id="${index}">X</button>
+		  	<p><strong class='chat-name'>${user.name}</strong></p>
+		  	<p><span class='chat-time'>${user.email}</span></p>
+			</div>
+		`;
+	}).join('');
+
+}
+
 const handleChatClick = () => {
 
 	console.log(' i am handle chat click');
@@ -96,6 +112,10 @@ const handleChatClick = () => {
 		console.log({id});
 	}
 
+}
+
+const handleRemoveSelectedUser = () => {
+	console.log('i am handle remove selected user');
 }
 
 const handleSubmitMessage = () => {
@@ -178,7 +198,7 @@ const render = () => {
 			  <div class="modal-dialog modal-dialog-centered" role="document">
 			    <div class="modal-content">
 			      <div class="modal-header">
-			        <h5 class="modal-title" >Settings</h5>
+			        <h5 class="modal-title" >${state.currentChat.name}'s Settings</h5>
 			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 			          <span aria-hidden="true">&times;</span>
 			        </button>
@@ -211,7 +231,7 @@ const render = () => {
 							      	<div class="container">
 				      					<p>Users added... </p>
 				      					<div id="usersAdded">
-				      						
+				      						${displaySelectedUsers()}
 				      					</div>
 							      	</div>
 			      					
@@ -250,7 +270,8 @@ const render = () => {
 		messageListEl.innerHTML = '';
 		messageListEl.insertAdjacentHTML('afterbegin', displayMessages());
 
-		/* not real socket btw */
+		document.querySelectorAll('.remove-user').forEach(btn => btn.addEventListener('click', handleRemoveSelectedUser));
+
 	}
 }
 
@@ -268,14 +289,18 @@ const getIncomingCurrentChatMsgs = () => {
 
 				const { messages } = data.data;
 
-				console.log(state.messages[state.messages.length -1]);
+				if(messages.length > 0) {
 
-				console.log(messages[messages.length - 1]);
+					console.log(state.messages[state.messages.length -1]);
 
-				if(state.messages[state.messages.length -1].author !== messages[messages.length - 1].author && state.messages[state.messages.length -1].content !== messages[messages.length - 1].content) {
+					console.log(messages[messages.length - 1]);
+
+					if(state.messages[state.messages.length -1].author !==messages[messages.length - 1].author || state.messages[state.messages.length -1].content !== messages[messages.length - 1].content) {
 					
-					setState({messages: messages.splice(-5)}); 
-					console.log(messages.splice(-5));
+						setState({messages: messages.splice(-5)}); 
+						console.log(messages.splice(-5));
+					}
+
 				}
 			})
 			.catch(err => console.warn(err.message));
