@@ -52,3 +52,19 @@
 #chatHeader button {
 	margin-top: 20px;
 }
+
+#form-message {
+	width: 100%;
+}
+
+.message-other {
+	left: 0;
+	text-align: left;
+	border: 1px solid grey;
+}
+
+.message-user {
+	right: 0;
+	text-align: left;
+	border: 1px solid blue; 
+}
