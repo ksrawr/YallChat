@@ -30,8 +30,8 @@ const displayAddedUsers = () => {
 	return chatFormState.addedUsers.map((user, index) => {
 		return `
 			<div class="user-added d-flex justify-content-between align-items-center" data-id="${index}">
-		  	<p><strong class='chat-name'>${user.name}</strong></p>
-		  	<p><span class='chat-time'>${user.email}</span></p>
+		  	<p data-id="${index}"><strong class='chat-name' data-id="${index}">${user.name}</strong></p>
+		  	<p data-id="${index}"><span class='chat-time' data-id="${index}">${user.email}</span></p>
 		</div>
 		`;
 	}).join('');
@@ -47,29 +47,31 @@ const handleClickSuggestion = () => {
 	console.log(element.nodeName);
 	console.log(element.parentNode.parentNode);
 
+	let parent, id, newUser;
+
 	if(element.nodeName === 'SPAN' || element.nodeName === 'STRONG') {
 		
-		const parent = element.parentNode.parentNode;
-		const id = parseInt(parent.getAttribute('data-id'));
-		const newUser = chatFormState.availableUsers[id];
+		parent = element.parentNode.parentNode;
+		id = parseInt(parent.getAttribute('data-id'));
+		newUser = chatFormState.availableUsers[id];
 
-		chatFormState.addedUsers.push(newUser);
-		chatFormState.availableUsers.splice(id, 1);
+	} else if(element.nodeName === 'P') {
 
-		renderChatForm();
+		parent = element.parentNode;
+		id = parseInt(parent.getAttribute('data-id'));
+		newUser = chatFormState.availableUsers[id];
 
 	} else {
 
-		const id = element.getAttribute('data-id');
-		const newUser = chatFormState.availableUsers[id];
-		chatFormState.addedUsers.push(newUser);
-		chatFormState.availableUsers.splice(id, 1);
-
-		renderChatForm();
+		id = element.getAttribute('data-id');
+		newUser = chatFormState.availableUsers[id];
 
 	}
 
+	chatFormState.addedUsers.push(newUser);
+	chatFormState.availableUsers.splice(id, 1);
 
+	renderChatForm();
 }
 
 const renderChatForm = () => {
@@ -90,7 +92,6 @@ const renderChatForm = () => {
 
 	if(chatFormState.addedUsers.length > 0) {
 		addedUsersEl.insertAdjacentHTML('beforeend', displayAddedUsers());
-
 
 	}
 
