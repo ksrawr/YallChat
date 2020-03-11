@@ -2,12 +2,16 @@ console.log(' i am app js');
 
 let state = {
 	username: '',
+	email: '',
 	chatrooms: [],
 	currentChat: null,
-	messages: []
+	messages: [],
+	selectedUsers: [],
+	openChannel: null,
 };
 
 const userNameEl = document.getElementById('userName');
+const userEmailEl = document.getElementById('userEmail');
 const navChatEl = document.getElementById('nav-chat');
 
 const displayChats = () => {
@@ -81,8 +85,11 @@ const handleChatClick = () => {
 				console.log(data);
 				setState({
 					currentChat: data.data,
+					selectedUsers: data.data.users,
 					messages: data.data.messages.slice(-5)
-				});
+				},initializeSocket);
+
+				
 			})
 			.catch(err => console.warn(err));
 	} else {
@@ -126,6 +133,9 @@ const render = () => {
 	userNameEl.innerHTML = '';
 	userNameEl.innerHTML = `${state.username}!`;
 
+	userEmailEl.innerHTML = '';
+	userEmailEl.innerHTML = ` (${state.email})`;
+
 	navChatEl.innerHTML = `
 		<div class="card search-container container">
 			<div class="card-body">
@@ -160,8 +170,62 @@ const render = () => {
 					<p>${date}</p>
 				</div>
 				<div class="col-sm-2">
-					<button class="btn btn-primary">Settings</button>
+					<button class="btn btn-primary btn-settings" data-toggle="modal" data-target="#settings-form">Settings</button>
 				</div>
+			</div>
+
+			<div class="modal fade" id="settings-form" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+			  <div class="modal-dialog modal-dialog-centered" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" >Settings</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			      	<div class="container">
+			      		<div class="row">
+			      			
+			      			<div class="col-sm-8">
+			      				<div class="container chatroom-form text-center d-flex justify-content-between align-items-center">
+						        	<form id="chatRoomForm">
+						        		<div class="chatroom-input">
+						        			<input id="chatRoomNameInput" type="text" name="name" placeholder="Chat Room Name">
+						        		</div>
+							        		<div class="chatroom-input">
+							        			<input id="usersInput" type="text" name="user" placeholder="Add Users" list=suggestions autocomplete="off">
+							        			
+							        			<div id="suggestions">
+							        				
+							        			</div>
+
+							        		</div>
+							        		<button type="submit" class="btn btn-primary">Create Chat Room</button>
+							        	</form>
+							        </div>
+							      </div>
+
+							      <div class="col-sm-4">
+
+							      	<div class="container">
+				      					<p>Users added... </p>
+				      					<div id="usersAdded">
+				      						
+				      					</div>
+							      	</div>
+			      					
+			      			</div>
+			      		</div>
+
+			     		 </div>
+			     	</div>
+			        
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			      </div>
+			    </div>
+			  </div>
 			</div>
 		`;
 
@@ -185,15 +249,54 @@ const render = () => {
 
 		messageListEl.innerHTML = '';
 		messageListEl.insertAdjacentHTML('afterbegin', displayMessages());
+
+		/* not real socket btw */
 	}
 }
 
-const setState = (obj) => {
+const getIncomingCurrentChatMsgs = () => {
+	if(!state.currentChat) {
+		clearInterval(state.openChannel);
+	} else {
+
+		fetch(`/api/v1/chatrooms/${state.currentChat._id}`, {
+			method: 'GET',
+		})
+			.then(res => res.json())
+			.then(data => {
+				console.log(data);
+
+				const { messages } = data.data;
+
+				console.log(state.messages[state.messages.length -1]);
+
+				console.log(messages[messages.length - 1]);
+
+				if(state.messages[state.messages.length -1].author !== messages[messages.length - 1].author && state.messages[state.messages.length -1].content !== messages[messages.length - 1].content) {
+					
+					setState({messages: messages.splice(-5)}); 
+					console.log(messages.splice(-5));
+				}
+			})
+			.catch(err => console.warn(err.message));
+
+	}
+
+}
+
+const initializeSocket = () => {
+	setState({
+		openChannel: setInterval(getIncomingCurrentChatMsgs, 5000)
+	});
+}
+
+const setState = (obj, callback) => {
 	/* this btw says create an object with state and obj */
 	/* NOTE any existing values in state will be overridden if obj has different values for them */
 	state = { ...state, ...obj};
 	console.log(state);
 	render();
+	if(callback) callback();
 }
 
 const getUserInfo = () => {
@@ -206,10 +309,11 @@ const getUserInfo = () => {
 		.then(res => res.json())
 		.then(data => {
 
-			const { name, chatrooms} = data.data;
+			const { name, chatrooms, email } = data.data;
 
 			setState({
 				'username': name,
+				'email': email,
 				'chatrooms': chatrooms
 			});
 
