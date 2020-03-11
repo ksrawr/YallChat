@@ -292,6 +292,24 @@ app.put('/api/v1/chatrooms/:id/messsages', (req, res) => {
 
 })
 
+app.put('/api/v1/chatrooms/:id', (req, res) => {
+
+	db.ChatRoom.findByIdAndUpdate(req.params.id, req.body, {new: true}).populate('users').exec((err, updatedChatRoom) => {
+
+		if(err) return res.status(500).json({message: "Something went wrong"});
+
+		const responseObj = {
+			status: 200,
+			data: updatedChatRoom,
+			requestedAt: new Date().toLocaleString(),
+		};
+
+		res.status(200).json(responseObj);
+
+	})
+
+})
+
 /* 404 Route */
 app.get('/*', (req, res) => {
 	res.status(400).sendFile(__dirname + '/views/404.html');
