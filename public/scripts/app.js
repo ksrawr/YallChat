@@ -51,8 +51,6 @@ const displayMessages = () => {
 
 const displaySelectedUsers = () => {
 
-	console.log(state.selectedUsers);
-
 	return state.selectedUsers.map((user, index) => {
 		return `
 			<div class="user-added d-flex justify-content-between align-items-center">
@@ -116,6 +114,17 @@ const handleChatClick = () => {
 
 const handleRemoveSelectedUser = () => {
 	console.log('i am handle remove selected user');
+
+	const btn = event.target;
+	const index = btn.getAttribute('data-id');
+
+	state.selectedUsers.splice(index, 1);
+
+	const selectedUsersListEl = document.getElementById('usersSelected');
+
+	/* Re-render Selected Users List */
+	selectedUsersListEl.innerHTML = '';
+	selectedUsersListEl.insertAdjacentHTML('afterbegin', displaySelectedUsers());
 }
 
 const handleSubmitMessage = () => {
@@ -209,14 +218,14 @@ const render = () => {
 			      			
 			      			<div class="col-sm-8">
 			      				<div class="container chatroom-form text-center d-flex justify-content-between align-items-center">
-						        	<form id="chatRoomForm">
+						        	<form id="editChatRoomForm">
 						        		<div class="chatroom-input">
-						        			<input id="chatRoomNameInput" type="text" name="name" placeholder="Chat Room Name">
+						        			<input id="editChatRoomNameInput" type="text" name="name" placeholder="Chat Room Name">
 						        		</div>
 							        		<div class="chatroom-input">
-							        			<input id="usersInput" type="text" name="user" placeholder="Add Users" list=suggestions autocomplete="off">
+							        			<input id="editUsersInput" type="text" name="user" placeholder="Add Users" list=suggestions autocomplete="off">
 							        			
-							        			<div id="suggestions">
+							        			<div id="editSuggestions">
 							        				
 							        			</div>
 
@@ -230,7 +239,7 @@ const render = () => {
 
 							      	<div class="container">
 				      					<p>Users added... </p>
-				      					<div id="usersAdded">
+				      					<div id="usersSelected">
 				      						${displaySelectedUsers()}
 				      					</div>
 							      	</div>
