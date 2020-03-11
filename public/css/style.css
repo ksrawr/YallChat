@@ -74,3 +74,9 @@
 	text-align: left;
 	border: 1px solid blue; 
 }
+
+.remove-user {
+	margin-bottom: 16px;
+	padding: 0;
+	color: #c2c2c2;
+}

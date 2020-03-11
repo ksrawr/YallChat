@@ -28,6 +28,16 @@
 	cursor: pointer;
 }
 
+.edit-suggestion {
+	margin: 5px;
+	max-width: 280px;
+	max-height: 50px;
+	border: 1px solid #ced4da;
+	border-radius: 2px;
+	padding: 10px;
+	cursor: pointer;
+}
+
 @media (min-width: 576px)
 .modal-dialog {
     max-width: 500px;
