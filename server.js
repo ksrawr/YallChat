@@ -43,6 +43,14 @@ app.get('/home', (req, res) => {
 	})
 })
 
+app.get('/profile', (req, res) => {
+	if(!req.session.currentUser) return res.direct('/login');
+	
+	res.sendFile('./views/profile.html', {
+		root: `${__dirname}/`
+	})
+})
+
 /* -------------------- AUTH API ROUTES ------------ */
 
 // AUTH Register
@@ -183,7 +191,6 @@ app.get('/api/v1/users/search', (req, res) => {
 
 	})
 
-
 })
 
 /* User API Routes */
@@ -196,6 +203,25 @@ app.get('/api/v1/users/:id', (req, res) => {
 		const responseObj = {
 			status: 200,
 			data: foundUser,
+			requestedAt: new Date().toLocaleString(),
+		};
+
+		res.status(200).json(responseObj);
+
+	})
+
+})
+
+// Update User Route
+app.put('/api/v1/users/:id', (req, res) => {
+
+	db.User.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedUser) => {
+
+		if(err) return res.status(500).json({message: 'Something went wrong :(((((((((', err});
+
+		const responseObj = {
+			status: 200,
+			data: updatedUser,
 			requestedAt: new Date().toLocaleString(),
 		};
 
