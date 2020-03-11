@@ -284,7 +284,7 @@ const render = () => {
 			      				<div class="container chatroom-form text-center d-flex justify-content-between align-items-center">
 						        	<form id="editChatRoomForm">
 						        		<div class="chatroom-input">
-						        			<input id="editChatRoomNameInput" type="text" name="name" placeholder="Chat Room Name">
+						        			<input id="editChatRoomNameInput" type="text" name="name" placeholder="Edit Chat Room Name">
 						        		</div>
 							        		<div class="chatroom-input">
 							        			<input id="editUsersInput" type="text" name="user" placeholder="Add Users" list=suggestions autocomplete="off">
@@ -294,7 +294,7 @@ const render = () => {
 							        			</div>
 
 							        		</div>
-							        		<button type="submit" class="btn btn-primary">Create Chat Room</button>
+							        		<button type="submit" class="btn btn-primary">Save Changes</button>
 							        	</form>
 							        </div>
 							      </div>
@@ -346,6 +346,8 @@ const render = () => {
 		renderSelectedUsers();
 
 		document.getElementById('editUsersInput').addEventListener('input', handleGetSuggestedUsers);
+
+		document.getElementById('editChatRoomForm').addEventListener('submit', editChatRoom);
 	}
 }
 
@@ -425,6 +427,43 @@ const setState = (obj, callback) => {
 	console.log(state);
 	render();
 	if(callback) callback();
+}
+
+const editChatRoom = () => {
+
+	event.preventDefault();
+
+	console.log('i am edit chat room event');	
+
+	const newChatRoomNameInput = document.getElementById('editChatRoomNameInput');
+
+	const editChatRoomObj = {
+		name: newChatRoomNameInput.value,
+	}
+
+	fetch(`/api/v1/chatrooms/${state.currentChat._id}`, {
+		method: 'PUT',
+		headers: {
+ 	 		'Content-Type': 'application/json',
+ 	 	},
+ 	 	body: JSON.stringify(editChatRoomObj)
+	})
+		.then(res => res.json())
+		.then(data => {
+			console.log(data)
+
+			if(data.status === 200) {
+				setTimeout(()=> {
+					$('#settings-form').modal('hide');
+					setState({
+						currentChat: data.data,
+						selectedUsers: data.data.users
+					})
+				}, 2000);
+			}
+
+		})
+		.catch(err => console.warn(err));
 }
 
 const getUserInfo = () => {
