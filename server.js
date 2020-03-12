@@ -315,7 +315,7 @@ app.get('/api/v1/chatrooms/:id', (req, res) => {
 // Add Message to ChatRoom
 app.put('/api/v1/chatrooms/:id/messsages', (req, res) => {
 
-	db.ChatRoom.findById(req.params.id, (err, foundChatRoom) => {
+	db.ChatRoom.findById(req.params.id).populate('users').populate('messages.author').exec((err, foundChatRoom) => {
 
 		if(err) return res.status(500).json({message: "Something went wrong", err});
 
@@ -325,13 +325,20 @@ app.put('/api/v1/chatrooms/:id/messsages', (req, res) => {
 
 			if(err) return res.status(500).json({message: "Something went wrong", err});
 
-			const responseObj = {
-				status: 200,
-				data: savedChatRoom,
-				requestedAt: new Date().toLocaleString(),
-			};
+			/* Get me the updated Chatroom with newly pushed method and its author */
+			db.ChatRoom.findById(req.params.id).populate('users').populate('messages.author').exec((err, expandedChatRoom) => {
 
-			res.status(200).json(responseObj);
+				if(err) return res.status(500).json({message: "Something went wrong", err});
+
+				const responseObj = {
+					status: 200,
+					data: expandedChatRoom,
+					requestedAt: new Date().toLocaleString(),
+				};
+
+				res.status(200).json(responseObj);
+
+			})
 
 		})
 
