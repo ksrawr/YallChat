@@ -14,7 +14,8 @@ let state = {
 
 const userNameEl = document.getElementById('userName');
 const userEmailEl = document.getElementById('userEmail');
-const navChatEl = document.getElementById('nav-chat');
+// const navChatEl = document.getElementById('nav-chat');
+const navChatEl = document.querySelector('.card-list');
 
 const displayChats = () => {
 	return state.chatrooms.map((chatroom, index) => {
@@ -236,16 +237,7 @@ const render = () => {
 	userEmailEl.innerHTML = '';
 	userEmailEl.innerHTML = ` (${state.email})`;
 
-	navChatEl.innerHTML = `
-		<div class="card search-container container">
-			<div class="card-body">
-				<form class="form-inline" id="searchChat">
-				  <div class="form-group mb-2 mx-sm-1">
-				    <input type="text" class="form-control" id="chatQuery" placeholder="Search Chats">
-				  </div>
-				</form>
-			</div>
-		</div>`;
+	navChatEl.innerHTML = '';
 	
 	if(state.chatrooms.length > 0) {
 		navChatEl.insertAdjacentHTML('beforeend', displayChats());
