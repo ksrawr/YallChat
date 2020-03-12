@@ -8,7 +8,8 @@ let state = {
 	messages: [],
 	selectedUsers: [],
 	openChannel: null,
-	availableUsers: []
+	availableUsers: [],
+	currentUsers: [],
 };
 
 const userNameEl = document.getElementById('userName');
@@ -91,12 +92,36 @@ const handleChatClick = () => {
 			.then(res => res.json())
 			.then(data => {
 				console.log(data);
+
+				////// For mobile
+				const chatContainerEl = document.querySelector('.chat-container');
+				console.log(chatContainerEl);
+
+				// Initial Display of Block
+				const chatContainerDisplay = chatContainerEl.currentStyle ? chatContainerEl.currentStyle.display : getComputedStyle(chatContainerEl, null).display;
+
+				console.log(chatContainerDisplay);
+
+				const chatroomContainerEL = document.querySelector('.message-container');
+
+				console.log(chatroomContainerEL.currentStyle ? element.currentStyle.display : getComputedStyle(chatroomContainerEL, null).display);
+
+				// Initial Display of Flex;
+				const chatroomDisplay = chatroomContainerEL.currentStyle ? chatroomContainerEL.currentStyle.display : getComputedStyle(chatroomContainerEL, null).display;
+
+				if(chatContainerDisplay === 'block' && chatroomDisplay === 'none') {
+					chatroomContainerEL.style.display = 'flex';
+					chatContainerEl.style.display = 'none';
+				}
+
+				//////////////
+
 				setState({
 					currentChat: data.data,
 					selectedUsers: data.data.users,
-					messages: data.data.messages.slice(-5)
+					messages: data.data.messages.slice(-5),
+					currentUsers: data.data.users,
 				},initializeSocket);
-
 				
 			})
 			.catch(err => console.warn(err));
@@ -344,10 +369,19 @@ const handleDeleteChatRoom = () => {
 		.then(data => {
 			console.log(data);
 			if(data.status === 200) {
-				setState({
-					currentChat: [],
-					selectedUsers: []
-				});
+
+				clearInterval(state.openChannel);
+
+				setTimeout(()=> {
+					$('#settings-form').modal('hide');
+					setState({
+						currentChat: [],
+						selectedUsers: [],
+						currentUsers: []
+					})
+
+					window.location.reload();
+				}, 2000);
 			}
 		})
 		.catch(err => console.log(err));
@@ -443,6 +477,8 @@ const editChatRoom = () => {
 
 	const newChatRoomNameInput = document.getElementById('editChatRoomNameInput');
 
+	console.log(state);
+
 	const editChatRoomObj = {
 		name: newChatRoomNameInput.value,
 	}
@@ -463,7 +499,8 @@ const editChatRoom = () => {
 					$('#settings-form').modal('hide');
 					setState({
 						currentChat: data.data,
-						selectedUsers: data.data.users
+						selectedUsers: data.data.users,
+						currentUsers: data.data.users
 					})
 				}, 2000);
 			}
