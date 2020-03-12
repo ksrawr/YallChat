@@ -13,6 +13,7 @@
 	border-left: 1px solid #ced4da;
 	border-bottom: 1px solid #ced4da;
 	padding: 0;
+	background-color: #E2E9F0;
 }
 
 .message-container {
@@ -94,7 +95,7 @@
 #nav-chat-tab {
 	cursor: default;
 	border: none;
-	border-right: 1px solid #ced4da;
+	border-right: 2px solid #ced4da;
 }
 
 @media only screen and (max-width: 600px) {
@@ -121,5 +122,27 @@
 	align-items: center;
 }*/
 
-.card-body {
+.search-container {
+	cursor: default;
+}
+
+.search-container, #nav-chat-tab {
+	background-color: #E2E9F0;
+}
+
+#nav-groups-tab {
+	border-right: 2px solid #ced4da;
+}
+
+.create-btn:hover {
+	background-color: #56A6FC;
+  color: white;
+}
+
+.nav-tabs {
+	border-bottom: 1px solid #ced4da;
+}
+
+#nav-tab h4 {
+	margin-top: 5px;
 }
