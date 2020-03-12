@@ -217,7 +217,6 @@ const render = () => {
 				<form class="form-inline" id="searchChat">
 				  <div class="form-group mb-2 mx-sm-1">
 				    <input type="text" class="form-control" id="chatQuery" placeholder="Search Chats">
-				    <button type="submit" class="btn btn-primary">Search</button>
 				  </div>
 				</form>
 			</div>
@@ -418,6 +417,10 @@ const getIncomingCurrentChatMsgs = () => {
 }
 
 const initializeSocket = () => {
+	if(state.openChannel) {
+		clearInterval(state.openChannel);
+	}
+
 	setState({
 		openChannel: setInterval(getIncomingCurrentChatMsgs, 5000)
 	});
