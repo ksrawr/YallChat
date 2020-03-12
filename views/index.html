@@ -16,6 +16,7 @@
 	<!-- Custom CSS + Scripts -->
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" type="text/css" href="css/createChatModal.css">
+	<link rel="stylesheet" type="text/css" href="css/nav.css">
 	<script defer type="text/javascript" src="/scripts/app.js"></script>
 	<script defer type="text/javascript" src="/scripts/chatroom-form.js"></script>
 	<script defer type="text/javascript" src="/scripts/logout.js"></script>
@@ -24,10 +25,10 @@
 <body>
 
 <!-- Nav Bar -->	
-<nav>
-	<li><a href="/home">Home</a></li>
-	<li><a href="/profile">Profile</a></li>
-	<li><a id="logout" href="/logout">Log Out</a></li>
+<nav id="main-nav">
+	<a href="/home">Home</a>
+	<a href="/profile">Profile</a>
+	<a id="logout" href="/logout">Log Out</a>
 </nav>
 
 <main>
@@ -39,7 +40,7 @@
 				<!-- Tabs for Messages and Groups -->
 				<nav>
 			  	<div class="nav nav-tabs" id="nav-tab" role="tablist">
-			    <a class="nav-item nav-link active" id="nav-chat-tab" data-toggle="tab" href="#nav-chat" role="tab" aria-controls="nav-chat" aria-selected="true">Chat</a>
+			    <a class="nav-item nav-link active" id="nav-chat-tab" data-toggle="tab" href="#nav-chat" role="tab" aria-controls="nav-chat" aria-selected="true"><h4>Chats</h4></a>
 			    <a class="nav-item nav-link" id="nav-groups-tab" role="tab">
 			    	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createChatRoomForm">
 						 	+

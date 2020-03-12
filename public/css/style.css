@@ -1,8 +1,8 @@
 .search-container {
 	border: none;	
-	border-right: 1px solid black;
-	border-left: 1px solid black;
-	border-bottom: 1px solid black;
+	border-right: 1px solid #ced4da;
+	border-left: 1px solid #ced4da;
+	border-bottom: 1px solid #ced4da;
 	border-radius: 0px;
 }
 
@@ -86,6 +86,10 @@
 	justify-content:space-between;
 }
 
+#nav-chat-tab {
+	cursor: default;
+}
+
 @media only screen and (max-width: 600px) {
 	.message-container {
 		display: none;
@@ -101,5 +105,4 @@
 	.back-button {
 		display: none;
 	}
-
 }
