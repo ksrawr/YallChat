@@ -1,13 +1,18 @@
 .search-container {
 	border: none;	
-	border-right: 1px solid #ced4da;
-	border-left: 1px solid #ced4da;
-	border-bottom: 1px solid #ced4da;
 	border-radius: 0px;
+	border-bottom: 1px solid #ced4da;
 }
 
 .chat-time {
 	text-align: right;
+}
+
+.chat-container {
+	border-top: 1px solid #ced4da;
+	border-left: 1px solid #ced4da;
+	border-bottom: 1px solid #ced4da;
+	padding: 0;
 }
 
 .message-container {
@@ -43,7 +48,7 @@
 	left: 0;
 	width: 100%;
 	text-align: left;
-	border: 1px solid #ced4da;
+	border-bottom: 1px solid #ced4da;
 }
 
 #chatHeader h4 {
@@ -88,6 +93,8 @@
 
 #nav-chat-tab {
 	cursor: default;
+	border: none;
+	border-right: 1px solid #ced4da;
 }
 
 @media only screen and (max-width: 600px) {
@@ -105,4 +112,14 @@
 	.back-button {
 		display: none;
 	}
+}
+
+/*#nav-chat {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}*/
+
+.card-body {
 }
