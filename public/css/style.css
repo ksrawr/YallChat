@@ -2,6 +2,7 @@
 	border: none;	
 	border-right: 1px solid black;
 	border-left: 1px solid black;
+	border-bottom: 1px solid black;
 	border-radius: 0px;
 }
 
@@ -87,6 +88,18 @@
 
 @media only screen and (max-width: 600px) {
 	.message-container {
-		display: relative;
+		display: none;
 	}
+
+	.show {
+		display: inline;
+	}
+}
+
+
+@media only screen and (min-width: 600px) {
+	.back-button {
+		display: none;
+	}
+
 }
