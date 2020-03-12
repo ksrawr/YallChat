@@ -80,3 +80,7 @@
 	padding: 0;
 	color: #c2c2c2;
 }
+
+#settings-footer {
+	justify-content:space-between;
+}
