@@ -350,9 +350,17 @@ app.put('/api/v1/chatrooms5/:id', (req, res) => {
 	
 	*/
 
-	db.ChatRoom.findByIdAndUpdate(req.params.id, req.body.name, {new: true}).populate('users').exec((err, updatedChatRoom) => {
+	db.ChatRoom.findByIdAndUpdate(req.params.id, {'name':req.body.name}, {new: true}).populate('users').exec((err, updatedChatRoom) => {
 
 		if(err) return res.status(500).json({message: "Something went wrong", err});
+
+		// for(let i = 0; i < req.body.users; i++) {
+		// 	updatedChatRoom.users.forEach(obj => {
+		// 		if(Object.values(obj).indexOf(req.body.users[i]) > -1) {
+		// 			req.body.users.splice(i, 1);
+		// 		}
+		// 	}) 
+		// }
 
 		db.User.updateMany({ _id: { $in: req.body.users } }, { $push: { chatrooms: req.params.id } }, { new: true }).populate('chatrooms').exec((err, updatedUser ) => {
 
@@ -391,6 +399,25 @@ app.put('/api/v1/chatrooms/:id', (req, res) => {
 			status: 200,
 			data: updatedChatRoom,
 			requestedAt: new Date().toLocaleString(),
+		};
+
+		res.status(200).json(responseObj);
+
+	})
+
+})
+
+// Delete Chat Room
+app.delete('/api/v1/chatrooms/:id', (req, res) => {
+
+	db.ChatRoom.findByIdAndDelete(req.params.id, (err, deletedChatRoom) => {
+
+		if(err) return res.status(500).json({message: "Something went wrong", err});
+
+		const responseObj = {
+			status: 200,
+			data: deletedChatRoom,
+			requestedAt: new Date().toLocaleString()
 		};
 
 		res.status(200).json(responseObj);
