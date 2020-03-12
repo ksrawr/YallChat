@@ -19,12 +19,12 @@ const displayChats = () => {
 	return state.chatrooms.map((chatroom, index) => {
 		return `
 			<div class="card" data-id="${index}">
-				<div class="card-body">
-					<div class="d-flex justify-content-between align-items-center">
-				  	<p><strong class='chat-name'>${chatroom.name}</strong></p>
-				  	<p><span class='chat-time'>11:20pm</span></p>
+				<div class="card-body" data-id="${index}">
+					<div class="d-flex justify-content-between align-items-center" data-id="${index}">
+				  	<p data-id="${index}"><strong class='chat-name' data-id="${index}">${chatroom.name}</strong></p>
+				  	<p data-id="${index}"><span class='chat-time' data-id="${index}">11:20pm</span></p>
 				  </div>
-				  <p>Display last message.</p>
+				  <p data-id="${index}">Display last message.</p>
 				</div>
 
 			</div>
@@ -80,26 +80,8 @@ const handleChatClick = () => {
 	console.log(' i am handle chat click');
 	console.log('ev.target', event.target.nodeName);
 
-	let parent;
-
-	if(event.target.nodeName === 'P') {
-		// console.log('event.target.parent.parent', event.target.parentNode.parentNode);
-		parent = event.target.parentNode.parentNode;
-	} else if(event.target.nodeName === 'SPAN' || event.target.nodeName === 'STRONG') {
-		// console.log('event.target.parent.parent.parent.parent', event.target.parentNode.parentNode.parentNode.parentNode);
-		parent = event.target.parentNode.parentNode.parentNode.parentNode;
-	} else if (event.target.classList.length >= 3) {
-		// console.log('event.target.parent.parent', event.target.parentNode.parentNode);
-		parent = event.target.parentNode.parentNode;
-	} else if (event.target.classList !== 'card') {
-		// console.log('event.target.parent', event.target.parentNode);
-		parent = event.target.parentNode;
-	}
-
-	/* Sanity on our edge cases!!!! */
-	console.log(parent);
-
-	const index = parent.getAttribute('data-id');
+	const index = event.target.getAttribute('data-id');
+	console.log(index);
 	const id = state.chatrooms[index]._id;
 
 	if(id) {
@@ -314,7 +296,8 @@ const render = () => {
 			     		 </div>
 			     	</div>
 			        
-			      <div class="modal-footer">
+			      <div class="modal-footer" id="settings-footer">
+			      	<button id="deleteChatRoom">Delete</button>
 			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 			      </div>
 			    </div>
@@ -348,7 +331,27 @@ const render = () => {
 		document.getElementById('editUsersInput').addEventListener('input', handleGetSuggestedUsers);
 
 		document.getElementById('editChatRoomForm').addEventListener('submit', editChatRoom);
+
+		document.getElementById('deleteChatRoom').addEventListener('click', handleDeleteChatRoom);
 	}
+}
+
+const handleDeleteChatRoom = () => {
+
+	fetch(`/api/v1/chatrooms/${state.currentChat._id}`, {
+		method: 'DELETE',
+	})
+		.then(res => res.json())
+		.then(data => {
+			console.log(data);
+			if(data.status === 200) {
+				setState({
+					currentChat: [],
+					selectedUsers: []
+				});
+			}
+		})
+		.catch(err => console.log(err));
 }
 
 const handleGetSuggestedUsers = () => {
