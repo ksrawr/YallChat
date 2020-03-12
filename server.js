@@ -296,7 +296,7 @@ app.get('/api/v1/chatrooms', (req, res) => {
 // Show Chat Room
 app.get('/api/v1/chatrooms/:id', (req, res) => {
 
-	db.ChatRoom.findById(req.params.id).populate('users').exec((err, foundChatRoom) => {
+	db.ChatRoom.findById(req.params.id).populate('users').populate('messages.author').exec((err, foundChatRoom) => {
 
 		if(err) return res.status(500).json({message: "Something went wrong", err});
 
