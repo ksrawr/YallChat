@@ -272,6 +272,25 @@ app.post('/api/v1/chatrooms/', (req, res) => {
 
 })
 
+// Index Chat Rooms
+app.get('/api/v1/chatrooms', (req, res) => {
+	
+	db.ChatRoom.find({}, (err, foundChatRooms) => {
+
+		if(err) return res.status(500).json({message: 'SOmething went wrong :((((((((', err});
+
+		const responseObj = {
+			status: 200,
+			data: foundChatRooms,
+			requestedAt: new Date().toLocaleString(),
+		};
+
+		res.status(200).json(responseObj);
+
+	})
+
+})
+
 // Show Chat Room
 app.get('/api/v1/chatrooms/:id', (req, res) => {
 
@@ -318,6 +337,50 @@ app.put('/api/v1/chatrooms/:id/messsages', (req, res) => {
 
 })
 
+// Update Chat Room with Many Users 
+app.put('/api/v1/chatrooms5/:id', (req, res) => {
+
+	/* 
+
+	Note to Self
+	
+	1) update Chat Room by Name first
+	2) update Chat Room by pushing added users
+	3) updateMany the added users to chat room
+	
+	*/
+
+	db.ChatRoom.findByIdAndUpdate(req.params.id, req.body.name, {new: true}).populate('users').exec((err, updatedChatRoom) => {
+
+		if(err) return res.status(500).json({message: "Something went wrong", err});
+
+		db.User.updateMany({ _id: { $in: req.body.users } }, { $push: { chatrooms: req.params.id } }, { new: true }).populate('chatrooms').exec((err, updatedUser ) => {
+
+			if(err) return res.status(500).json({message: "Something went wrong", err});
+
+		})
+
+	})
+
+	db.ChatRoom.findByIdAndUpdate(req.params.id, { $push: { users: req.body.users } }, { new: true }).populate('users').exec((err, updateChatRoomUsers) => {
+
+		if(err) return res.status(500).json({message: "Something went wrong", err});
+
+
+		const responseObj = {
+			status: 200,
+			data: updateChatRoomUsers,
+			requestedAt: new Date().toLocaleString(),
+		};
+
+		res.status(200).json(responseObj);
+
+	})
+
+
+})
+
+// Update Chat Room with Only Name
 app.put('/api/v1/chatrooms/:id', (req, res) => {
 
 	db.ChatRoom.findByIdAndUpdate(req.params.id, req.body, {new: true}).populate('users').exec((err, updatedChatRoom) => {
