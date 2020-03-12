@@ -4,8 +4,10 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const bcrypt = require('bcryptjs');
 const app = express();
-
+const http = require('http');
+const server = http.createServer(app);
 const db = require('./models');
+const io = require('socket.io').listen(server);
 require('dotenv').config();
 
 const PORT = process.env.PORT;
@@ -431,6 +433,6 @@ app.get('/*', (req, res) => {
 	res.status(400).sendFile(__dirname + '/views/404.html');
 })
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
 	console.log(`Server is running on http://localhost:${PORT}`);
 })

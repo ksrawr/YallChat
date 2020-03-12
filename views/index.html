@@ -10,6 +10,9 @@
 	<script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	<script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
+	<!-- Socket.io -->
+	<script defer src="/socket.io/socket.io.js"></script>
+
 	<!-- Custom CSS + Scripts -->
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" type="text/css" href="css/createChatModal.css">
@@ -31,7 +34,7 @@
 
 	<div id="chat-container" class="container">
 		<div class="row">
-			<div class="col-sm-12 col-md-4">
+			<div class="col-sm-12 col-md-4 chat-container">
 
 				<!-- Tabs for Messages and Groups -->
 				<nav>
