@@ -68,18 +68,39 @@
 	display: flex;
 	flex-direction: column;
 	width: 100%;
+	height: 65%;
+	overflow: auto;
 }
 
 .message-other {
 	text-align: left;
-	border: 1px solid grey;
+	padding: 5px;
+	border: 2px solid grey;
 	width: max-content;
+	margin: 3px;
 }
 
 .message-user {
-	align-self: flex-end;
+	align-self: flex-end; 
+	margin: 3px;
+	display: flex;
+	flex-direction: column;
+}
+
+.message-user .message {
+	margin: 0px;
+	padding: 5px;
 	text-align: left;
-	border: 1px solid blue; 
+	border: 2px solid blue;
+	align-self: flex-end;
+}
+
+.message-user .message-author {
+	text-align: right;
+}
+
+.message-container small {
+	text-align: right;
 }
 
 .remove-user {
