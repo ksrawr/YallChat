@@ -132,7 +132,6 @@ const handleChatClick = () => {
 
 				setState({
 					currentChat: data.data,
-					// messages: data.data.messages.slice(-5),
 					messages: data.data.messages,
 					currentUsers: data.data.users,
 				},initializeSocket);
@@ -218,6 +217,7 @@ const handleSubmitMessage = () => {
 			.then(data => {
 				console.log(data);
 				state.messages.push(data.data.messages.slice(-1).shift());
+				console.log(state);
 				render();
 			})
 			.catch(err => console.log(err))
@@ -431,9 +431,7 @@ const getIncomingCurrentChatMsgs = () => {
 
 					if(state.messages[state.messages.length -1].author.name !== messages[messages.length - 1].author.name || state.messages[state.messages.length -1].content !== messages[messages.length - 1].content) {
 					
-						// setState({messages: messages.splice(-5)}); 
 						setState({messages: messages});
-						console.log(messages.splice(-5));
 					}
 
 				}
