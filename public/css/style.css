@@ -173,7 +173,7 @@
 }
 
 .currentusers-container {
-	height: 25%;
+	height: 28%;
 	overflow: auto;
 	margin-bottom: 20px;
 }
@@ -181,4 +181,18 @@
 .current-user {
 	padding: 10px;
 	border: 1px solid #ced4da;
+	width: 100%;
+}
+
+.current-user p {
+	margin-bottom: 0;
+}
+
+.currentusers-box {
+	margin-top: 20px;
+}
+
+.currentuser-header {
+	border-bottom: 1px solid #ced4da;
+	margin: 0;
 }

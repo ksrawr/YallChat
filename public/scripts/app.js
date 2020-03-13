@@ -72,8 +72,8 @@ const displayEditSuggestedUsers = () => {
 	return 'Found users...' + state.availableUsers.map((user, index) => {
 		return `
 							<div class="edit-suggestion d-flex justify-content-between align-items-center" data-id="${index}">
-							  	<p><strong class='chat-name'>${user.name}</strong></p>
-							  	<p><span class='chat-time'>${user.email}</span></p>
+							  	<p data-id="${index}"><strong class='chat-name' data-id="${index}">${user.name}</strong></p>
+							  	<p data-id="${index}"><span data-id="${index}" class='chat-time'>${user.email}</span></p>
 							</div>
 						`;
 	}).join('');
@@ -172,29 +172,8 @@ const handleEditClickSuggestion = () => {
 
 	if(!element) return;
 
-	console.log(element.nodeName);
-	console.log(element.parentNode.parentNode);
-
-	let parent, id, newUser;
-
-	if(element.nodeName === 'SPAN' || element.nodeName === 'STRONG') {
-		
-		parent = element.parentNode.parentNode;
-		id = parseInt(parent.getAttribute('data-id'));
-		newUser = state.availableUsers[id];
-
-	} else if(element.nodeName === 'P') {
-
-		parent = element.parentNode;
-		id = parseInt(parent.getAttribute('data-id'));
-		newUser = state.availableUsers[id];
-
-	} else {
-
-		id = element.getAttribute('data-id');
-		newUser = state.availableUsers[id];
-
-	}
+	const id = element.getAttribute('data-id');
+	const newUser = state.availableUsers[id];
 
 	state.selectedUsers.push(newUser);
 	state.availableUsers.splice(id, 1);
@@ -314,11 +293,11 @@ const render = () => {
 							        </div>
 							      </div>
 
-							      <div class="col-sm-4">
+							      <div class="col-sm-4 currentusers-box">
 							      	<div class="container">
-							      		<p>Current Users...</p>
+							      		<p class="currentuser-header">Current Users...</p>
 							      	</div>
-							      	<div class="container currentusers-container">
+							      	<div class=" currentusers-container">
 							      		${displayCurrentUsers()}
 							      	</div>
 							      	<div class="container usersselected-list">
@@ -496,9 +475,10 @@ const editChatRoom = () => {
 
 	const editChatRoomObj = {
 		name: newChatRoomNameInput.value,
+		users: state.selectedUsers
 	}
 
-	fetch(`/api/v1/chatrooms/${state.currentChat._id}`, {
+	fetch(`/api/v1/chatrooms5/${state.currentChat._id}`, {
 		method: 'PUT',
 		headers: {
  	 		'Content-Type': 'application/json',
@@ -514,9 +494,11 @@ const editChatRoom = () => {
 					$('#settings-form').modal('hide');
 					setState({
 						currentChat: data.data,
-						currentUsers: data.data.users
+						currentUsers: data.data.users,
+						selectedUsers: []
 					})
 				}, 2000);
+				getUserInfo();
 			}
 
 		})
