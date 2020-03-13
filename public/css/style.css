@@ -196,3 +196,12 @@
 	border-bottom: 1px solid #ced4da;
 	margin: 0;
 }
+
+.card-list {
+	height: 420px;
+	overflow: auto;
+}
+
+.card-list .card {
+	overflow: hidden;
+}
