@@ -8,7 +8,7 @@ const http = require('http');
 const server = http.createServer(app);
 const db = require('./models');
 const io = require('socket.io').listen(server);
-require('dotenv').config();
+// require('dotenv').config();
 
 const PORT = process.env.PORT;
 
@@ -16,8 +16,8 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 
 app.use(session({
-    store: new MongoStore({ url: process.env.MONGO_URI }),
-    secret: process.env.SESSION_SECRET,
+    store: new MongoStore({ url: process.env.MONGODB_URI }),
+    secret: process.env.SESSION_SECRET || 'wapplesANDwapples',
     resave: false,
     saveUninitialized: false,
     cookie: {
