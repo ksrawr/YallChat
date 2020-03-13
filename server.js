@@ -251,7 +251,6 @@ app.post('/api/v1/chatrooms/', (req, res) => {
 
 			if(err) return res.status(500).json({message: "Something went wrong", err, bug: 'b1'});
 
-			otherUserObj = { updatedUser };
 
 		})
 
@@ -269,6 +268,41 @@ app.post('/api/v1/chatrooms/', (req, res) => {
 
 			res.status(200).json(responseObj);
 		})
+
+	})
+
+})
+
+// Create Chat Room and Update Many Users
+app.post('/api/v1/chatrooms5/', (req, res) => {
+
+	req.body.author = req.session.currentUser.id;
+	req.body.users.push(req.session.currentUser.id);
+
+	db.ChatRoom.create(req.body, (err, createdChatRoom) => {
+
+		if(err) return res.status(500).json({message: "Something went wrong", err});
+
+		db.User.updateMany({ _id: { $in: req.body.users } }, { $push: { chatrooms: createdChatRoom._id } }, { new: true }).populate('chatrooms').exec((err, updatedUser ) => {
+
+			if(err) return res.status(500).json({message: "Something went wrong", err});
+
+		})
+
+	})
+
+	db.User.findById(req.session.currentUser.id).populate('chatrooms').exec((err, foundUser) => {
+
+		if(err) return res.status(500).json({message: "Something went wrong", err});
+
+		const responseObj = {
+			status: 200,
+			data: foundUser,
+			requestedAt: new Date().toLocaleString(),
+		};
+
+		res.status(200).json(responseObj);
+	
 
 	})
 

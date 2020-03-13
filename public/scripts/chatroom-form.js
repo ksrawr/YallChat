@@ -140,7 +140,7 @@ const createChatRoom = () => {
 		users: chatFormState.addedUsers,
 	};
 
-	fetch('/api/v1/chatrooms/', {
+	fetch('/api/v1/chatrooms5/', {
 		method: 'POST',
 		headers: {
  	 		'Content-Type': 'application/json',
@@ -165,6 +165,7 @@ const createChatRoom = () => {
 				setState({
 					chatrooms: data.data.chatrooms
 				});
+				window.location.reload();
 			}, 2000);
 
 		})
