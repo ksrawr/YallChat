@@ -429,7 +429,7 @@ const getIncomingCurrentChatMsgs = () => {
 
 					console.log(messages[messages.length - 1]);
 
-					if(state.messages[state.messages.length -1].author !==messages[messages.length - 1].author || state.messages[state.messages.length -1].content !== messages[messages.length - 1].content) {
+					if(state.messages[state.messages.length -1].author.name !== messages[messages.length - 1].author.name || state.messages[state.messages.length -1].content !== messages[messages.length - 1].content) {
 					
 						// setState({messages: messages.splice(-5)}); 
 						setState({messages: messages});
