@@ -423,7 +423,7 @@ const getIncomingCurrentChatMsgs = () => {
 
 				const { messages } = data.data;
 
-				if(messages.length > 0) {
+				if(messages.length > 0 && state.messages.length > 0) {
 
 					console.log(state.messages[state.messages.length -1]);
 
@@ -434,6 +434,8 @@ const getIncomingCurrentChatMsgs = () => {
 						setState({messages: messages});
 					}
 
+				} else if(messages.length > 0){
+					setState({messages: messages});
 				}
 			})
 			.catch(err => console.warn(err.message));
