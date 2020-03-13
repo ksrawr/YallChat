@@ -42,7 +42,7 @@
 			  	<div class="nav nav-tabs" id="nav-tab" role="tablist">
 			    <a class="nav-item nav-link active" id="nav-chat-tab" data-toggle="tab" href="#nav-chat" role="tab" aria-controls="nav-chat" aria-selected="true"><h4>Chats</h4></a>
 			    <a class="nav-item nav-link" id="nav-groups-tab" role="tab">
-			    	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createChatRoomForm">
+			    	<button type="button" class="btn btn-primary create-btn" data-toggle="modal" data-target="#createChatRoomForm">
 						 	+
 						</button>
 			    </a>
@@ -124,6 +124,8 @@
 							</div>
 						</div>
 
+						<div class="card-list">
+
 						<div class="card">
 							<div class="card-body">
 								<div class="d-flex justify-content-between align-items-center">
@@ -149,6 +151,8 @@
 
 				</div>
 
+				</div>
+
 			</div>
 			<div class="col-sm-12 col-md-8 message-container">
 				<!-- Chat Header -->
@@ -163,8 +167,10 @@
 				</div>
 
 				<!-- Message List -->
-				<div id="messageList">
-					
+				<div class="messageList-container">
+					<div id="messageList">
+						
+					</div>
 				</div>
 
 				<!-- Message Input -->

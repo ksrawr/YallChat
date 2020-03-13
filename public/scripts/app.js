@@ -26,7 +26,7 @@ const displayChats = () => {
 				  	<p data-id="${index}"><strong class='chat-name' data-id="${index}">${chatroom.name}</strong></p>
 				  	<p data-id="${index}"><span class='chat-time' data-id="${index}">11:20pm</span></p>
 				  </div>
-				  <p data-id="${index}"> ${chatroom.messages[chatroom.messages.length - 1].content}</p>
+				  <p data-id="${index}"> ${chatroom.messages.length > 0 ? chatroom.messages[chatroom.messages.length - 1].content : '(New ChatRoom) Say Hi!'}</p>
 				</div>
 
 			</div>
