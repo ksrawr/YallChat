@@ -74,10 +74,15 @@
 
 .message-other {
 	text-align: left;
+	margin: 3px;
+}
+
+.message-other .message {
+	margin: 0px;
 	padding: 5px;
 	border: 2px solid grey;
+	border-radius: 3px;
 	width: max-content;
-	margin: 3px;
 }
 
 .message-user {
@@ -89,10 +94,11 @@
 
 .message-user .message {
 	margin: 0px;
-	padding: 5px;
+	padding: 10px;
 	text-align: left;
 	border: 2px solid blue;
 	align-self: flex-end;
+	border-radius: 3px;
 }
 
 .message-user .message-author {
@@ -136,13 +142,6 @@
 	}
 }
 
-/*#nav-chat {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-}*/
-
 .search-container {
 	cursor: default;
 }
@@ -166,4 +165,20 @@
 
 #nav-tab h4 {
 	margin-top: 5px;
+}
+
+.chatroom-input h5 {
+	text-align: left;
+	margin-left: 10px;
+}
+
+.currentusers-container {
+	height: 25%;
+	overflow: auto;
+	margin-bottom: 20px;
+}
+
+.current-user {
+	padding: 10px;
+	border: 1px solid #ced4da;
 }

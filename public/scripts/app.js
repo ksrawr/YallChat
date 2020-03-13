@@ -26,7 +26,7 @@ const displayChats = () => {
 				  	<p data-id="${index}"><strong class='chat-name' data-id="${index}">${chatroom.name}</strong></p>
 				  	<p data-id="${index}"><span class='chat-time' data-id="${index}">11:20pm</span></p>
 				  </div>
-				  <p data-id="${index}">Display last message.</p>
+				  <p data-id="${index}"> ${chatroom.messages[chatroom.messages.length - 1].content}</p>
 				</div>
 
 			</div>
@@ -36,16 +36,18 @@ const displayChats = () => {
 
 const displayMessages = () => {
 	return state.messages.map((message, index) => {
-		if(message.author === localStorage.getItem('uid')) {
+		if(message.author._id === localStorage.getItem('uid')) {
 			return `
 				<div class="message-user">
-					${message.content}
+					<p class="message">${message.content}</p>
+					<small class="message-author">${message.createdAt} by ${message.author.name}</small>
 				</div>
 			`;
 		} else {
 			return `
 				<div class="message-other">
-					${message.content}
+					<p class="message">${message.content}</p>
+					<small class="message-author">${message.createdAt} by ${message.author.name}</small>
 				</div>
 			`;
 		}
@@ -74,6 +76,17 @@ const displayEditSuggestedUsers = () => {
 							  	<p><span class='chat-time'>${user.email}</span></p>
 							</div>
 						`;
+	}).join('');
+}
+
+const displayCurrentUsers = () => {
+	return state.currentUsers.map((user) => {
+		return `
+			<div class="current-user d-flex justify-content-between align-items-center">
+				<p><strong>${user.name}</strong></p>
+				<p><span>${user.email}</span></p>
+			</div>
+		`;
 	}).join('');
 }
 
@@ -119,8 +132,8 @@ const handleChatClick = () => {
 
 				setState({
 					currentChat: data.data,
-					selectedUsers: data.data.users,
-					messages: data.data.messages.slice(-5),
+					// messages: data.data.messages.slice(-5),
+					messages: data.data.messages,
 					currentUsers: data.data.users,
 				},initializeSocket);
 				
@@ -186,6 +199,8 @@ const handleEditClickSuggestion = () => {
 	state.selectedUsers.push(newUser);
 	state.availableUsers.splice(id, 1);
 
+	console.log(state);
+
 	renderSuggestUsers();
 	renderSelectedUsers();
 }
@@ -247,6 +262,7 @@ const render = () => {
 
 	if(state.currentChat) {
 		const { name, date } = state.currentChat;
+		const formattedDate = new Date(date);
 		const chatHeaderEl = document.getElementById('chatHeader');
 		const messageStateEl = document.getElementById('messageState');
 		const messageFormEl = document.getElementById('messageForm');
@@ -258,7 +274,7 @@ const render = () => {
 			<div class="row">	
 				<div class="col-sm-10">
 					<h4>${name}</h4>
-					<p>${date}</p>
+					<p>${formattedDate}</p>
 				</div>
 				<div class="col-sm-2">
 					<button class="btn btn-primary btn-settings" data-toggle="modal" data-target="#settings-form">Settings</button>
@@ -282,7 +298,8 @@ const render = () => {
 			      				<div class="container chatroom-form text-center d-flex justify-content-between align-items-center">
 						        	<form id="editChatRoomForm">
 						        		<div class="chatroom-input">
-						        			<input id="editChatRoomNameInput" type="text" name="name" placeholder="Edit Chat Room Name">
+						        			<h5>Edit Chat Room</h5>
+						        			<input id="editChatRoomNameInput" type="text" name="name" value="${state.currentChat.name}">
 						        		</div>
 							        		<div class="chatroom-input">
 							        			<input id="editUsersInput" type="text" name="user" placeholder="Add Users" list=suggestions autocomplete="off">
@@ -298,8 +315,13 @@ const render = () => {
 							      </div>
 
 							      <div class="col-sm-4">
-
 							      	<div class="container">
+							      		<p>Current Users...</p>
+							      	</div>
+							      	<div class="container currentusers-container">
+							      		${displayCurrentUsers()}
+							      	</div>
+							      	<div class="container usersselected-list">
 				      					<p>Users added... </p>
 				      					<div id="usersSelected">
 
@@ -430,7 +452,8 @@ const getIncomingCurrentChatMsgs = () => {
 
 					if(state.messages[state.messages.length -1].author !==messages[messages.length - 1].author || state.messages[state.messages.length -1].content !== messages[messages.length - 1].content) {
 					
-						setState({messages: messages.splice(-5)}); 
+						// setState({messages: messages.splice(-5)}); 
+						setState({messages: messages});
 						console.log(messages.splice(-5));
 					}
 
@@ -447,9 +470,9 @@ const initializeSocket = () => {
 		clearInterval(state.openChannel);
 	}
 
-	setState({
-		openChannel: setInterval(getIncomingCurrentChatMsgs, 5000)
-	});
+	// setState({
+	// 	openChannel: setInterval(getIncomingCurrentChatMsgs, 5000)
+	// });
 }
 
 const setState = (obj, callback) => {
@@ -491,7 +514,6 @@ const editChatRoom = () => {
 					$('#settings-form').modal('hide');
 					setState({
 						currentChat: data.data,
-						selectedUsers: data.data.users,
 						currentUsers: data.data.users
 					})
 				}, 2000);
