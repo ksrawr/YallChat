@@ -449,9 +449,9 @@ const initializeSocket = () => {
 		clearInterval(state.openChannel);
 	}
 
-	// setState({
-	// 	openChannel: setInterval(getIncomingCurrentChatMsgs, 5000)
-	// });
+	setState({
+		openChannel: setInterval(getIncomingCurrentChatMsgs, 5000)
+	});
 }
 
 const setState = (obj, callback) => {
