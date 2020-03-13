@@ -46,7 +46,7 @@ app.get('/home', (req, res) => {
 })
 
 app.get('/profile', (req, res) => {
-	if(!req.session.currentUser) return res.direct('/login');
+	if(!req.session.currentUser) return res.redirect('/login');
 	
 	res.sendFile('./views/profile.html', {
 		root: `${__dirname}/`
@@ -362,14 +362,6 @@ app.put('/api/v1/chatrooms5/:id', (req, res) => {
 	db.ChatRoom.findByIdAndUpdate(req.params.id, {'name':req.body.name}, {new: true}).populate('users').exec((err, updatedChatRoom) => {
 
 		if(err) return res.status(500).json({message: "Something went wrong", err});
-
-		// for(let i = 0; i < req.body.users; i++) {
-		// 	updatedChatRoom.users.forEach(obj => {
-		// 		if(Object.values(obj).indexOf(req.body.users[i]) > -1) {
-		// 			req.body.users.splice(i, 1);
-		// 		}
-		// 	}) 
-		// }
 
 		db.User.updateMany({ _id: { $in: req.body.users } }, { $push: { chatrooms: req.params.id } }, { new: true }).populate('chatrooms').exec((err, updatedUser ) => {
 
