@@ -10,12 +10,14 @@ let state = {
 	openChannel: null,
 	availableUsers: [],
 	currentUsers: [],
+	openChatRoomChannel: null,
 };
 
 const userNameEl = document.getElementById('userName');
 const userEmailEl = document.getElementById('userEmail');
 // const navChatEl = document.getElementById('nav-chat');
 const navChatEl = document.querySelector('.card-list');
+const createBtnEl = document.querySelector('.create-btn');
 
 const displayChats = () => {
 	return state.chatrooms.map((chatroom, index) => {
@@ -224,6 +226,20 @@ const handleSubmitMessage = () => {
 	}
 }
 
+const handleModalSettingsForm = () => {
+
+	console.log(' i am handle modal settings form');
+
+	if(state.openChannel) {
+		clearInterval(state.openChannel);
+	}
+
+	if(state.openChatRoomChannel) {
+		clearInterval(state.openChatRoomChannel);
+	}
+
+}
+
 const render = () => {
 	userNameEl.innerHTML = '';
 	userNameEl.innerHTML = `${state.username}!`;
@@ -323,22 +339,27 @@ const render = () => {
 		`;
 
 		messageStateEl.innerHTML = '';
-		messageFormEl.innerHTML = '';
 
-		messageFormEl.innerHTML = `
-		<form id="form-message">
-			<div class="row">
-				<div class="col-sm-10">
-					<input id="messageInput" type="text" name="" placeholder="Message...">
-				</div>
-				<div class="col-sm-2">
-					<button type="submit" class="btn btn-primary">Send</button>
-				</div>
-			</div>
-		</form>
-		`;
+		if(messageFormEl.innerText === '') {
+			messageFormEl.innerHTML = '';
 
-		document.getElementById('form-message').addEventListener('submit', handleSubmitMessage);
+			messageFormEl.innerHTML = `
+			<form id="form-message">
+				<div class="row">
+					<div class="col-sm-10">
+						<input id="messageInput" type="text" name="" placeholder="Message...">
+					</div>
+					<div class="col-sm-2">
+						<button type="submit" class="btn btn-primary">Send</button>
+					</div>
+				</div>
+			</form>
+			`;
+
+			document.getElementById('form-message').addEventListener('submit', handleSubmitMessage);
+		}
+
+		// document.getElementById('form-message').addEventListener('submit', handleSubmitMessage);
 
 		messageListEl.innerHTML = '';
 		messageListEl.insertAdjacentHTML('afterbegin', displayMessages());
@@ -350,6 +371,13 @@ const render = () => {
 		document.getElementById('editChatRoomForm').addEventListener('submit', editChatRoom);
 
 		document.getElementById('deleteChatRoom').addEventListener('click', handleDeleteChatRoom);
+
+		document.querySelector('.btn-settings').addEventListener('click', handleModalSettingsForm);
+
+		$('#settings-form').on('hide.bs.modal', function (e) {
+			initializeSocket();
+		})
+
 	}
 }
 
@@ -527,4 +555,32 @@ const getUserInfo = () => {
 		.catch(err => console.warn(err));
 };
 
+const handleUserTyping = () => {
+	console.log('wtfffff');
+	if(state.openChatRoomChannel) {
+		clearInterval(state.openChatRoomChannel);
+	}
+}
+
+createBtnEl.addEventListener('click', handleModalSettingsForm);
+
+$('#createChatRoomForm').on('hide.bs.modal', function (e) {
+	if(state.currentChat) {
+		setState({
+			openChannel: setInterval(getIncomingCurrentChatMsgs, 5000),
+			openChatRoomChannel: setInterval(getUserInfo, 5000)
+		});
+	} else {
+		setState({
+			openChatRoomChannel: setInterval(getUserInfo, 5000)
+		});
+	}
+	
+})
+
 getUserInfo();
+
+/* Get all My ChatRooms every 5 seconds */
+setState({
+	openChatRoomChannel: setInterval(getUserInfo, 5000)
+});
