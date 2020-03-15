@@ -10,13 +10,13 @@ const db = require('./models');
 const io = require('socket.io').listen(server);
 // require('dotenv').config();
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 4000;
 
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 
 app.use(session({
-    store: new MongoStore({ url: process.env.MONGODB_URI }),
+    store: new MongoStore({ url: process.env.MONGODB_URI || "mongodb://localhost:27017/yallchat-app" }),
     secret: process.env.SESSION_SECRET || 'wapplesANDwapples',
     resave: false,
     saveUninitialized: false,
