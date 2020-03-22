@@ -571,7 +571,7 @@ const getUserInfo = () => {
 				'username': name,
 				'email': email,
 				'chatrooms': chatrooms
-			});
+			}, socketUserActive);
 
 		})
 		.catch(err => console.warn(err));
@@ -599,6 +599,14 @@ $('#createChatRoomForm').on('hide.bs.modal', function (e) {
 	}
 	
 })
+
+const socketUserActive = () => {
+	state.socket.emit('active', {username: state.username, email: state.email, chatrooms: state.chatrooms}, (error) => {
+
+		if(error) console.warn(error);
+
+	});
+}
 
 getUserInfo();
 
