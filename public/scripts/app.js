@@ -11,11 +11,11 @@ let state = {
 	availableUsers: [],
 	currentUsers: [],
 	openChatRoomChannel: null,
+	socket: io(),
 };
 
 const userNameEl = document.getElementById('userName');
 const userEmailEl = document.getElementById('userEmail');
-// const navChatEl = document.getElementById('nav-chat');
 const navChatEl = document.querySelector('.card-list');
 const createBtnEl = document.querySelector('.create-btn');
 
@@ -132,11 +132,19 @@ const handleChatClick = () => {
 
 				//////////////
 
+				// setState({
+				// 	currentChat: data.data,
+				// 	messages: data.data.messages,
+				// 	currentUsers: data.data.users,
+				// },initializeSocket);
+
 				setState({
 					currentChat: data.data,
 					messages: data.data.messages,
 					currentUsers: data.data.users,
-				},initializeSocket);
+				},initializeChatSocket);
+
+				// initializeChatSocket();
 				
 			})
 			.catch(err => console.warn(err));
@@ -480,6 +488,20 @@ const initializeSocket = () => {
 	setState({
 		openChannel: setInterval(getIncomingCurrentChatMsgs, 5000)
 	});
+
+}
+
+const initializeChatSocket = () => {
+
+	state.socket.emit('join', {chatRoomId: state.currentChat._id, username: state.username}, (error) => {
+
+		if(error) console.warn({error});
+
+	})
+
+	state.socket.on('message', (message) => {
+		console.log({message});
+	})
 }
 
 const setState = (obj, callback) => {
