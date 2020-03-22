@@ -471,13 +471,17 @@ io.on('connection', (socket) => {
 	
 	console.log('client connected');
 
+	socket.on('active', ({username, email, chatrooms}, callback) => {
+		socket.user = { username, email, chatrooms };
+
+		callback();
+	})
+
 	socket.on('join', ({chatRoomId, username}, callback) => {
 
 		db.ChatRoom.findById(chatRoomId).populate('users').populate('messages.author').exec((error, foundChatRoom) => {
 
 			if(error) return callback({message: "Something went wrong", error});
-
-			console.log(foundChatRoom);
 
 			socket.join(foundChatRoom._id);
 
@@ -493,8 +497,12 @@ io.on('connection', (socket) => {
 
 	})
 
+	socket.on('disconnecting', () => {
+		console.log('client is disconnecting', socket.user.username);
+	})
+
 	socket.on('disconnect', () => {
-		console.log('client disconnected');
+		console.log('client disconnected', socket.user.username);
 		socket.emit('message', {msg: ''})
 	})
 })
