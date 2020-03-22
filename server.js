@@ -466,6 +466,39 @@ app.get('/*', (req, res) => {
 	res.status(400).sendFile(__dirname + '/views/404.html');
 })
 
+/* Socket Connection */
+io.on('connection', (socket) => {
+	
+	console.log('client connected');
+
+	socket.on('join', ({chatRoomId, username}, callback) => {
+
+		db.ChatRoom.findById(chatRoomId).populate('users').populate('messages.author').exec((error, foundChatRoom) => {
+
+			if(error) return callback({message: "Something went wrong", error});
+
+			console.log(foundChatRoom);
+
+			socket.join(foundChatRoom._id);
+
+			socket.emit('message', { user: 'admin', msg: `${username}, welcome to ${foundChatRoom.name}.`});
+
+			socket.broadcast.to(foundChatRoom._id).emit('message', { msg: `${username} has joined!`}); 
+
+			io.to(chatRoomId).emit('chatRoomData', { data: foundChatRoom });
+
+			return callback();
+
+		});
+
+	})
+
+	socket.on('disconnect', () => {
+		console.log('client disconnected');
+		socket.emit('message', {msg: ''})
+	})
+})
+
 server.listen(PORT, () => {
 	console.log(`Server is running on http://localhost:${PORT}`);
 })
