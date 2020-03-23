@@ -467,7 +467,7 @@ app.get('/*', (req, res) => {
 })
 
 /* all online users connected to socket*/
-const users = [];
+const users = {};
 /* Socket Connection */
 io.on('connection', (socket) => {
 	
@@ -476,7 +476,7 @@ io.on('connection', (socket) => {
 	socket.on('session', ({username, email, chatrooms}, callback) => {
 		const user = { username, email, chatrooms };
 
-		if(!socket.user) users.push({username, email});
+		if(!socket.user) users[socket.id] = {username, email};
 
 		socket.user = user;
 
@@ -518,6 +518,10 @@ io.on('connection', (socket) => {
 			console.log('client disconnected', socket.user.username);
 		}
 		socket.emit('message', {msg: ''})
+
+		delete users[socket.id];
+
+		console.log(users);
 	})
 })
 
