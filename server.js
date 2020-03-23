@@ -466,13 +466,23 @@ app.get('/*', (req, res) => {
 	res.status(400).sendFile(__dirname + '/views/404.html');
 })
 
+/* all online users connected to socket*/
+const users = [];
 /* Socket Connection */
 io.on('connection', (socket) => {
 	
 	console.log('client connected');
 
-	socket.on('active', ({username, email, chatrooms}, callback) => {
-		socket.user = { username, email, chatrooms };
+	socket.on('session', ({username, email, chatrooms}, callback) => {
+		const user = { username, email, chatrooms };
+
+		if(!socket.user) users.push({username, email});
+
+		socket.user = user;
+
+		console.log(users);
+
+		socket.emit('all users status', {activeUsers: ''});
 
 		callback();
 	})
@@ -498,11 +508,15 @@ io.on('connection', (socket) => {
 	})
 
 	socket.on('disconnecting', () => {
-		console.log('client is disconnecting', socket.user.username);
+		if(socket.user) {
+			console.log('client is disconnecting', socket.user.username);
+		}
 	})
 
 	socket.on('disconnect', () => {
-		console.log('client disconnected', socket.user.username);
+		if(socket.user) {
+			console.log('client disconnected', socket.user.username);
+		}
 		socket.emit('message', {msg: ''})
 	})
 })

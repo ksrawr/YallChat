@@ -571,7 +571,7 @@ const getUserInfo = () => {
 				'username': name,
 				'email': email,
 				'chatrooms': chatrooms
-			}, socketUserActive);
+			}, socketUserSession);
 
 		})
 		.catch(err => console.warn(err));
@@ -600,17 +600,21 @@ $('#createChatRoomForm').on('hide.bs.modal', function (e) {
 	
 })
 
-const socketUserActive = () => {
-	state.socket.emit('active', {username: state.username, email: state.email, chatrooms: state.chatrooms}, (error) => {
+const socketUserSession = () => {
+	state.socket.emit('session', {username: state.username, email: state.email, chatrooms: state.chatrooms}, (error) => {
 
 		if(error) console.warn(error);
 
 	});
+
+	state.socket.on('all users status', (data) => {
+		console.log({data});
+	})
 }
 
 getUserInfo();
 
 /* Get all My ChatRooms every 5 seconds */
-setState({
-	openChatRoomChannel: setInterval(getUserInfo, 5000)
-});
+// setState({
+// 	openChatRoomChannel: setInterval(getUserInfo, 5000)
+// });
